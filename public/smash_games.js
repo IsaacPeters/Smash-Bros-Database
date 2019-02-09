@@ -26,26 +26,8 @@ function buildTable(queryData) {
         table.appendChild(newItem);
     });
     table = table.parentElement.parentElement;
-	
-	var tbody = document.createElement("tbody");
-	var row1 = document.createElement("tr");
-	var row1 = document.createElement("tr");
-	
-	var cell = document.createElement("td");
-	var cell2 = document.createElement("td");
-	var cell3 = document.createElement("td");
-	var cell4 = document.createElement("td");
-	
-	row1.appendChild(cell);
-	row1.appendChild(cell2);
-	row2.appendChild(cell3);
-	row2.appendChild(cell4);
-	
-	tbody.appendChild(trow1);
-	tbody.appendChild(trow2);
-	
-    table.appendChild(tbody);
-	
+
+    table.appendChild(document.createElement("tbody"));
     table = table.children[1];
 
     table = table.parentElement;
