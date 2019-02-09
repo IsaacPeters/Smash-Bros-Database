@@ -11,7 +11,7 @@ app.set('port', 6875);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
-    res.render('Original_series');
+    res.render('Smash_maps');
 });
 
 app.get('/all',function(req,res,next){
