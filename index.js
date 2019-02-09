@@ -11,7 +11,23 @@ app.set('port', 6875);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
+    res.render('home');
+});
+
+app.get('/Smash_maps',function(req,res){
     res.render('Smash_maps');
+});
+
+app.get('/Smash_games',function(req,res){
+    res.render('Smash_games');
+});
+
+app.get('/Original_series',function(req,res){
+    res.render('Original_series');
+});
+
+app.get('/Characters',function(req,res){
+    res.render('Characters');
 });
 
 app.get('/all',function(req,res,next){
