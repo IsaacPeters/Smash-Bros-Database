@@ -36,3 +36,23 @@ INSERT INTO `Original_Series` (`Id`, `Name`, `First_game`, `Creation_year`, `Num
 
 --Insert a new Smash Game
 INSERT INTO `Original_Series` (`Id`, `Name`, `Creation_year`) VALUES (NULL, :smash_name, :smash_creation_year);
+
+
+-- Note, I created the next queries in string format so we can more easily import them
+--  into our project
+
+-- Update Character
+"UPDATE Characters SET Name=?, Species=?, Year_released=?, Smash_year=?, Series_id=? WHERE id=?",
+    [:NameInput || currentName, :SpeciesInput || currentSpecies, :Year_releasedInput || currentYear_released, :Smash_yearInput || currentSmash_year, :Series_id_from_dropdownInput || currentSeries_id, :idToUpdate]
+
+-- Update Original Series
+"UPDATE Original_series SET Name=?, First_game=?, Creation_year=?, Number_of_games=? WHERE id=?",
+    [:NameInput || currentName, :First_gameInput || currentFirst_game, :Creation_yearInput || currentCreation_year, :Number_of_gamesInput || currentNumber_of_games, :idToUpdate]
+
+-- Update Smash Game
+"UPDATE Smash_games SET Name=?, Year_released=? WHERE id=?",
+    [:NameInput || currentName, :Year_releasedInput || currentYear_released, :idToUpdate]
+
+-- Update Smash Map
+"UPDATE Smash_maps SET Name=?, Year_added_to_smash=?, Original_series=? WHERE id=?",
+    [:NameInput || currentName, :Year_added_to_smashInput || currentYear_added_to_smash, :Series_id_from_dropdownInput || currentSeries_id, :idToUpdate]
