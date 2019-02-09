@@ -26,8 +26,11 @@ function buildTable(queryData) {
         table.appendChild(newItem);
     });
     table = table.parentElement.parentElement;
+	
+	var tbody = document.createElement("tbody");
 
-    table.appendChild(document.createElement("tbody"));
+    table.appendChild(tbody);
+	
     table = table.children[1];
 
     table = table.parentElement;
