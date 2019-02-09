@@ -11,7 +11,7 @@ app.set('port', 6875);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
-    res.render('home');
+    res.render('Original_series');
 });
 
 app.get('/all',function(req,res,next){
@@ -76,22 +76,22 @@ app.get('/removeID',function(req,res,next){
     });
 });
 
-app.get('/reset-table',function(req,res,next){
-    var context = {};
-    mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
-        var createString = "CREATE TABLE workouts("+
-        "id INT PRIMARY KEY AUTO_INCREMENT,"+
-        "name VARCHAR(255) NOT NULL,"+
-        "reps INT,"+
-        "weight INT,"+
-        "date DATE,"+
-        "lbs BOOLEAN)";
-        mysql.pool.query(createString, function(err){
-            context.results = "Table reset";
-            res.render('home',context);
-        })
-    });
-});
+// app.get('/reset-table',function(req,res,next){
+//     var context = {};
+//     mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
+//         var createString = "CREATE TABLE workouts("+
+//         "id INT PRIMARY KEY AUTO_INCREMENT,"+
+//         "name VARCHAR(255) NOT NULL,"+
+//         "reps INT,"+
+//         "weight INT,"+
+//         "date DATE,"+
+//         "lbs BOOLEAN)";
+//         mysql.pool.query(createString, function(err){
+//             context.results = "Table reset";
+//             res.render('home',context);
+//         })
+//     });
+// });
 
 app.use(function(req,res){
   res.status(404);

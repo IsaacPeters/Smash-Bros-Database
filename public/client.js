@@ -107,7 +107,7 @@ function buildTable(queryData) {
     table.firstElementChild.appendChild(document.createElement("tr"));
     table = table.firstElementChild.firstElementChild;
 
-    var dataNames = ["name", "reps", "weight", "date", "lbs"];
+    var dataNames = ["Name", "First Game", "Creation Year", "Number of Games"];
     dataNames.forEach( function (element) {
 
         var newItem = document.createElement("th");
@@ -150,9 +150,8 @@ function buildTable(queryData) {
             });
 
             //Create delete/update buttons
-            row.appendChild(document.createElement("form"));
-            row.lastElementChild.appendChild(document.createElement("fieldset"));
-            row = row.lastElementChild.lastElementChild;
+            row.appendChild(document.createElement("td"));
+            row = row.lastElementChild;
 
             for (var i = 0; i < 3; i++) {
                 row.appendChild(document.createElement("input"));
@@ -172,7 +171,7 @@ function buildTable(queryData) {
             row.children[2].id = element.id;
             
 
-            row = row.parentElement.parentElement;
+            row = row.parentElement;
 
             table.appendChild(row);
         });
