@@ -30,18 +30,18 @@ app.get('/Characters',function(req,res){
     res.render('Characters');
 });
 
-app.get('/all',function(req,res,next){
-    var context = {};
-    mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
-        if(err){
-            console.log("ran into an error");
-            next(err);
-            return;
-        }
-        context.results = JSON.stringify(rows);
-        res.send(context);
-    });
-});
+// app.get('/all',function(req,res,next){
+//     var context = {};
+//     mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+//         if(err){
+//             console.log("ran into an error");
+//             next(err);
+//             return;
+//         }
+//         context.results = JSON.stringify(rows);
+//         res.send(context);
+//     });
+// });
 
 app.get('/insert',function(req,res,next){
     var context = {};
