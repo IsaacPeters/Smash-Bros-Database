@@ -27,7 +27,7 @@ app.get('/Original_series',function(req,res){
 });
 
 app.get('/Characters',function(req,res){
-    res.render('Characters');
+    res.render('characters');
 });
 
 // app.get('/all',function(req,res,next){
