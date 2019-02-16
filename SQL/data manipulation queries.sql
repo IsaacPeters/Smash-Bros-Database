@@ -1,17 +1,17 @@
 -- get all values from Characters table
-SELECT * FROM Characters;
+SELECT (`Id`, `Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series_id`) FROM Characters;
 
 -- get all values from Characters table that share a series
-SELECT * FROM Characters WHERE Series_id = :desired_series;
+SELECT (`Id`, `Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series_id`) FROM Characters WHERE Series_id = :desired_series;
 
 -- get all values from Smash_Maps table
-SELECT * FROM Smash_Maps;
+SELECT (`Id`, `Name`, `Year_added_to_Smash`, `Series_id`) FROM Smash_Maps;
 
 -- get all values from Smash_Games table
-SELECT * FROM Smash_Games;
+SELECT (`Id`, `Name`, `Creation_year`) FROM Smash_Games;
 
 -- get all values from Original_Series table
-SELECT * FROM Original_Series;
+SELECT (`Id`, `Name`, `First_game`, `Creation_year`, `Number_of_games`) FROM Original_Series;
 
 -- delete value form Characters table
 DELETE FROM Characters WHERE Id = :character_id
@@ -35,7 +35,7 @@ INSERT INTO `Smash_Maps` (`Id`, `Name`, `Year_added_to_Smash`, `Series_id`) VALU
 INSERT INTO `Original_Series` (`Id`, `Name`, `First_game`, `Creation_year`, `Number_of_games`) VALUES (NULL, :series_name, :series_creation_year, :series_number_of_games);
 
 --Insert a new Smash Game
-INSERT INTO `Original_Series` (`Id`, `Name`, `Creation_year`) VALUES (NULL, :smash_name, :smash_creation_year);
+INSERT INTO `Smash_Games` (`Id`, `Name`, `Creation_year`) VALUES (NULL, :smash_name, :smash_creation_year);
 
 
 -- Note, I created the next queries in string format so we can more easily import them
