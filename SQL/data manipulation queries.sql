@@ -7,6 +7,9 @@ SELECT (`Id`, `Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series
 -- get all values from Smash_Maps table
 SELECT (`Id`, `Name`, `Year_added_to_Smash`, `Series_id`) FROM Smash_Maps;
 
+-- get all values from Original_Series table
+SELECT (`Id`, `Name`, `First_game`, `Creation_year`, `Number_of_games`) FROM Original_Series;
+
 -- get all values from Smash_Games table
 SELECT (`Id`, `Name`, `Creation_year`) FROM Smash_Games;
 
