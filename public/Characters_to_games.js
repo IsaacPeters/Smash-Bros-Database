@@ -19,7 +19,6 @@ $("document").ready(function(){
 	$('#dataDisplay').append(tablehead);
 	
 	console.log("Loading Data");
-	loadData();
 });
 
 function loadData(){
