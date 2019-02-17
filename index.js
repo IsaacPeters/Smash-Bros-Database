@@ -30,6 +30,14 @@ app.get('/Characters',function(req,res){
     res.render('characters');
 });
 
+app.get('/Maps_to_games',function(req,res){
+    res.render('Maps_to_games');
+});
+
+app.get('/Characters_to_games',function(req,res){
+    res.render('Characters_to_games');
+});
+
 app.get('/fill_characters',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT * FROM Characters', function(err, rows, fields){
