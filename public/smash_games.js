@@ -1,70 +1,260 @@
-
-//Create table at start
-var table = buildTable(null);
-var body = document.body;
-table.id = "mainTable";
-body.appendChild(table);
-
-document.addEventListener("DOMContentLoaded", bindButtons);
-
-function bindButtons(){
-    initTable();
-}
-
-function buildTable(queryData) {
-    var table = document.createElement("table");
-    table.appendChild(document.createElement("thead"));
-    table.firstElementChild.appendChild(document.createElement("tr"));
-    table = table.firstElementChild.firstElementChild;
-
-    var dataNames = ["Name", "Year Released"];
-    dataNames.forEach( function (element) {
-
-        var newItem = document.createElement("th");
-        newItem.textContent = element;
-        newItem.id = "H" + element;
-        table.appendChild(newItem);
-    });
-    table = table.parentElement.parentElement;
+$("document").ready(function(){
+	var tablehead = document.createElement('thead');
+	var headers = ["Id", "Name", "Release Year"];
+	var header = document.createElement('tr');
 	
-	var tbody = document.createElement("tbody");
-
-    table.appendChild(tbody);
+	for (i in headers){
+		var headerCell = document.createElement('th');
+		headerCell.append(headers[i]);
+		if(i == 0){
+			$(headerCell).addClass('hiddenCol');
+		}
+		else if(i == 7){
+			$(headerCell).addClass('updateCell');
+		}
+		header.append(headerCell);
+	}
 	
-    table = table.children[1];
+	tablehead.append(header);
+	$('#dataDisplay').append(tablehead);
+	
+	console.log("Loading Data");
+	loadData();
+	fillGames();
+});
 
-    table = table.parentElement;
-
-    table.style.borderStyle = "solid";
-
-    //Styling the Table
-    var tableBlocks = table.getElementsByTagName("th");
-    for (var i = 0; i < tableBlocks.length; i++) {
-        tableBlocks[i].style.borderStyle = "solid";
-        tableBlocks[i].style.backgroundColor = "lightgreen";
-    }
-
-    tableBlocks = table.getElementsByTagName("td");
-    for (var i = 0; i < tableBlocks.length; i++) {
-        tableBlocks[i].style.borderStyle = "solid";
-    }
-
-    return table;
+function loadData(){
+	$.ajax({
+		url: '/fill_smash',
+		method: "get",
+		dataType: 'json',
+		success: function(data,textStatus,jqXHR){
+			var json = JSON.parse(data.results);
+			
+			$('table #dataRow').each(function(){
+				$(this).remove();
+			});
+			$('table tbody').each(function(){
+				$(this).remove();
+			});
+	
+			var tablebody = document.createElement('tbody');
+			
+			if(json.length){
+				for (var i = 0; i < json.length; i++){
+					var newRow = document.createElement('tr');
+					$('newRow').attr('id','dataRow');
+					for(data in json[i]){
+						var newCell = document.createElement('td');
+						newCell.append(json[i][data]);
+						if(data == "date"){
+							var date = $(newCell).text();
+							date = date.substring(0, (date.indexOf('T')));
+							$(newCell).text(date);
+						}
+						if(data == "Id"){
+							$(newCell).addClass('hiddenCol');
+						}
+						newRow.append(newCell);
+					}
+					var deleteBtn = document.createElement('button');
+					var newCell = document.createElement('td');
+					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).text('Delete');
+					newCell.append(deleteBtn);
+					newRow.append(newCell);
+					
+					var edit = document.createElement('button');
+					var newCell = document.createElement('td');
+					$(newCell).addClass('updateCell');
+					$(edit).addClass('updateExer');
+					$(edit).text('Edit');
+					newCell.append(edit);
+					newRow.append(newCell);
+					
+					tablebody.append(newRow);
+				}
+				$('#dataDisplay').append(tablebody);
+			}
+		},
+		error: function(ts){console.log("Error in the Get");},
+	});
 }
 
-function initTable() {
-    var req = new XMLHttpRequest();
-    req.open("GET", "/all", true);
-
-    req.addEventListener("load", function(){
-        var response = JSON.parse(req.responseText);
-        var response = JSON.parse(response.results);
-        var updatedTable = buildTable(response);
-        body.removeChild(document.getElementById("mainTable"));
-        updatedTable.id = "mainTable";
-        body.appendChild(updatedTable);
-    });
-
-    req.send(null);
-    event.preventDefault();
+function fillGames(){
+	$.ajax({
+		url: '/fill_smash_games_dropdown',
+		method: "get",
+		dataType: 'json',
+		success: function(data,textStatus,jqXHR){
+			var json = JSON.parse(data.results);
+			if(json.length){
+					var select = $('#Smash_Games_Select');
+					for (var i = 0; i < json.length; i++){
+						for(data in json[i]){
+							console.log(json[i][data]);
+							var option = document.createElement('option');
+							option.value = json[i][data];
+							option.innerHTML = json[i][data];
+							console.log(option);
+							select.append(option);
+						}
+					}
+				}
+		},
+		error: function(ts){console.log("Error in the Get");},
+	});
 }
+
+$('#insert').submit('click',function(event) {
+	$.ajax({
+		url : "/insert",
+		method: "get",
+		dataType: "json",
+		data: $("#insert").serialize(),
+		success: function(){
+			console.log("Loading Data after insert");
+			loadData();
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+	
+	$('#exerInput').val(null);
+	$('#dateInput').val(null);
+	$('#repsInput').val(null);
+	$('#weightInput').val(null);
+	$('#unitInput').prop('checked', false);
+	
+	event.preventDefault();
+});
+
+$(document).on('click','.updateExer',function(){
+	console.log("Changing Windows");
+	$('#update').toggle();
+	$('#insert').toggle();
+	$('.updateCell').toggle();
+	
+	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
+	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
+	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
+	
+	var unit = $(this).closest('tr').find('td:eq(5)').text();
+	if(unit == "Pounds"){
+		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
+	}
+	else{
+		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
+	}
+});
+
+
+$('#update').submit('click', function(event){
+	
+	var id = $('#idUpdate').val();
+	$.ajax({
+		url: '/update?id='+id+'&',
+		method: "get",
+		dataType: "json",
+		data: $("#update").serialize(),
+		success: function(){
+			console.log("Updating Data");
+			loadData();
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+
+	console.log("Changing Windows");
+	$('#update').toggle();
+	$('#insert').toggle();
+	$('.updateCell').toggle();
+	
+	event.preventDefault();
+});
+
+$(document).on('click','#submitCSButton',function(){
+	$.ajax({
+		url: '/fill_series',
+		method: "get",
+		dataType: 'json',
+		success: function(data,textStatus,jqXHR){
+			var json = JSON.parse(data.results);
+			
+			$('table #dataRow').each(function(){
+				$(this).remove();
+			});
+			$('table tbody').each(function(){
+				$(this).remove();
+			});
+	
+			var tablebody = document.createElement('tbody');
+			
+			if(json.length){
+				for (var i = 0; i < json.length; i++){
+					var newRow = document.createElement('tr');
+					$('newRow').attr('id','dataRow');
+					for(data in json[i]){
+						var newCell = document.createElement('td');
+						newCell.append(json[i][data]);
+						if(data == "date"){
+							var date = $(newCell).text();
+							date = date.substring(0, (date.indexOf('T')));
+							$(newCell).text(date);
+						}
+						if(data == "Id"){
+							$(newCell).addClass('hiddenCol');
+						}
+						newRow.append(newCell);
+					}
+					var deleteBtn = document.createElement('button');
+					var newCell = document.createElement('td');
+					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).text('Delete');
+					newCell.append(deleteBtn);
+					newRow.append(newCell);
+					
+					var edit = document.createElement('button');
+					var newCell = document.createElement('td');
+					$(newCell).addClass('updateCell');
+					$(edit).addClass('updateExer');
+					$(edit).text('Edit');
+					newCell.append(edit);
+					newRow.append(newCell);
+					
+					tablebody.append(newRow);
+				}
+				$('#dataDisplay').append(tablebody);
+			}
+		},
+		error: function(ts){console.log("Error in the Get");},
+	});
+});
+
+$(document).on('click','.deleteExer',function(){
+	var id = $(this).closest('tr').find('td:eq(0)').text();
+	console.log(id);
+	
+	$.ajax({
+		url : "/delete?id="+id,
+		success: function(){
+			console.log("Loading Data after insert");
+			loadData();
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+	
+});
+
+$(document).on('click','.clearBtn',function(){
+	
+	$.ajax({
+		url : "/reset-table",
+		success: function(){
+			console.log("Resetting Data");
+			loadData();
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+	
+});

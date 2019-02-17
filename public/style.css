@@ -1,0 +1,23 @@
+.hiddenCol{
+	display: none;
+}
+.hiddenCell{
+	display:none;
+}
+#insert{
+	display: block;
+}
+#update{
+	background-color: #C0C0C0;
+	display: none;
+}
+#idUpdate{
+	display:none;
+}
+th{
+	border: solid;
+	background-color: lightgreen;
+}
+td{
+	border: solid;
+}
