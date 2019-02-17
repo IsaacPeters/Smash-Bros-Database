@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6875);
+app.set('port', 1920);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -30,9 +30,74 @@ app.get('/Characters',function(req,res){
     res.render('characters');
 });
 
-app.get('/all',function(req,res,next){
+app.get('/fill_characters',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT * FROM workouts', function(err, rows, fields){
+    mysql.pool.query('SELECT * FROM Characters', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/fill_series',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT * FROM Original_Series', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/fill_smash',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT * FROM Smash_Games', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/fill_maps',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT * FROM Smash_Maps', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/fill_characters_by_series',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT Name FROM Original_Series', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/fill_smash_games_dropdown',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT Name FROM Smash_Games', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -79,10 +144,10 @@ app.get('/update',function(req,res,next){
     });
 });
 
-app.get('/removeID',function(req,res,next){
+app.get('/delete',function(req,res,next){
     var context = {};
     //console.log(req.query);
-    mysql.pool.query("DELETE FROM workouts WHERE id=?", [req.query.id], function(err, result){
+    mysql.pool.query("DELETE FROM Characters WHERE Id=?", [req.query.id], function(err, result){
         if(err){
             next(err);
             return;
@@ -91,23 +156,6 @@ app.get('/removeID',function(req,res,next){
         res.send(context);
     });
 });
-
-// app.get('/reset-table',function(req,res,next){
-//     var context = {};
-//     mysql.pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
-//         var createString = "CREATE TABLE workouts("+
-//         "id INT PRIMARY KEY AUTO_INCREMENT,"+
-//         "name VARCHAR(255) NOT NULL,"+
-//         "reps INT,"+
-//         "weight INT,"+
-//         "date DATE,"+
-//         "lbs BOOLEAN)";
-//         mysql.pool.query(createString, function(err){
-//             context.results = "Table reset";
-//             res.render('home',context);
-//         })
-//     });
-// });
 
 app.use(function(req,res){
   res.status(404);
