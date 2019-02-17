@@ -11,6 +11,23 @@
         <input type="button" id="submitButton" value="Add Game">
     </fieldset>
 </form>
-<div>
-</div>
+</br>
+<form>
+	<fieldset>
+		<label for="Check_Smash_Contents">Show the </label>
+		<select name="Check_Smash_Contents" id="Check_Smash_Contents">
+			<option value="Choose">--Choose One--</option>
+			<option value="Characters">Characters</option>
+			<option value="Maps">Maps</option>
+		</select>
+		<lable for="Smash_Games_Select"> that can be found in the game: </label>
+			<select name="Smash_Games_Select" id="Smash_Games_Select">
+			<option value="Choose">--Choose One--</option>
+		</select>
+		<input type="button" id="submitCSButton" value="Check Game">
+	</fieldset>
+</form>
+</br>
+<table id="dataDisplay"> </table>
+<script src="./jquery-3.3.1.js"></script>
 <script src="./smash_games.js"></script>

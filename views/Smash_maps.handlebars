@@ -11,8 +11,20 @@
         <label for="Original_series">Original Series</label>
         <input type="text" name="Original_series" id="Original_series">
         <br><br>
-        <input type="button" id="submitButton" value="Add Original Series">
+        <input type="button" id="submitButton" value="Add New Map">
     </fieldset>
-<div>
-</div>
+</br>
+<form>
+	<fieldset>
+		<label for="By_series">Choose a series to see which maps originated from it: </label>
+		<select name="By_series" id="By_series">
+			<option value="no_series">No Series</option>
+		</select>
+		<input type="button" id="submitCSButton" value="Check Series">
+	</fieldset>
+</form>
+</br>
+<table id="dataDisplay"> </table>
+
+<script src="./jquery-3.3.1.js"></script>
 <script src="./Smash_maps.js"></script>
