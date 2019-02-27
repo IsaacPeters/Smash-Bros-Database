@@ -1,19 +1,19 @@
 {{> navigation}}
-<form>
+<form id = newMGRelationship>
     <fieldset>
         <legend>Add Smash Map to Smash Game Relationship</legend>
         
 		<label for="Smash_map">Choose which map you want to assign a game: </label>
-		<select name="Smash_map" id="Smash_map">
+		<select name="smash_maps_dropdown" id="smash_maps_dropdown">
 			<option value="no_series">No Map</option>
 		</select>
         <br>
 		<label for="Smash_game">Choose which game you want to assign it to: </label>
-		<select name="Smash_game" id="Smash_game">
+		<select name="smash_games_dropdown" id="smash_games_dropdown">
 			<option value="no_series">No Game</option>
 		</select>
         <br><br>
-        <input type="button" id="submitButton" value="Add Relationship">
+        <input type="submit" id="submitButton" value="Add Relationship">
     </fieldset>
 <table id="dataDisplay"> </table>
 

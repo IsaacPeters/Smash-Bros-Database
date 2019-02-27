@@ -1,20 +1,19 @@
 {{> navigation}}
-<form>
+<form id=newCGRelationship>
     <fieldset>
         <legend>Add Character to Smash Game Relationship</legend>
         
 		<label for="Character">Choose which character you want to assign a game: </label>
-		<select name="Character" id="Character">
-			<option value="no_series">No Character</option>
+		<select name="smash_characters_dropdown" id="smash_characters_dropdown">
 		</select>
         <br>
 		<label for="Smash_game">Choose which game you want to assign it to: </label>
-		<select name="Smash_game" id="Smash_game">
-			<option value="no_series">No Game</option>
+		<select name="smash_games_dropdown" id="smash_games_dropdown">
 		</select>
         <br><br>
-        <input type="button" id="submitButton" value="Add Relationship">
+        <input type="submit" id="submitButton" value="Add Relationship">
     </fieldset>
+</form>
 <table id="dataDisplay"> </table>
 
 <script src="./jquery-3.3.1.js"></script>

@@ -1,28 +1,29 @@
 {{> navigation}}
-<form>
+<form id = newMap>
     <fieldset>
         <legend>Add Smash Map</legend>
         <label for="Name">Name</label>
-        <input type="text" name="Name" id="Name">
+        <input type="text" name="map_name" id="map_name">
         <br>
         <label for="Year_added_to_smash">Year Added to Smash</label>
-        <input type="number" name="Year_added_to_smash" id="Year_added_to_smash">
+        <input type="number" name="map_smash_year" id="map_smash_year">
         <br>
 		<label for="Series_id">Original Series: </label>
-		<select name="Series_id" id="Series_id">
-			<option value="no_series">No Series</option>
+		<select name="map_series_dropdown" id="map_series_dropdown">
+			<option value="no_series">New Series</option>
 		</select>
         <br><br>
-        <input type="button" id="submitButton" value="Add New Map">
+        <input type="submit" id="submitButton" value="Add New Map">
     </fieldset>
+</form>
 </br>
 <form>
 	<fieldset>
 		<label for="By_series">Choose a series to see which maps originated from it: </label>
-		<select name="By_series" id="By_series">
-			<option value="no_series">No Series</option>
+		<select name="Maps_by_series" id="Maps_by_series">
+			<option value="no_series">All Series</option>
 		</select>
-		<input type="button" id="submitCSButton" value="Check Series">
+		<input type="button" id="submitMSButton" value="Check Series">
 	</fieldset>
 </form>
 </br>
