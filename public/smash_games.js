@@ -83,7 +83,7 @@ function loadData(){
 
 function fillGames(){
 	$.ajax({
-		url: '/fill_smash_games_dropdown',
+		url: '/fill_dropdown_by_smash',
 		method: "get",
 		dataType: 'json',
 		success: function(data,textStatus,jqXHR){
@@ -106,25 +106,19 @@ function fillGames(){
 	});
 }
 
-$('#insert').submit('click',function(event) {
+$('#newSmash').submit('click',function(event) {
 	$.ajax({
-		url : "/insert",
+		url : "/insert_smash",
 		method: "get",
 		dataType: "json",
-		data: $("#insert").serialize(),
+		data: $("#newSmash").serialize(),
 		success: function(){
 			console.log("Loading Data after insert");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
-	$('#exerInput').val(null);
-	$('#dateInput').val(null);
-	$('#repsInput').val(null);
-	$('#weightInput').val(null);
-	$('#unitInput').prop('checked', false);
-	
+
 	event.preventDefault();
 });
 

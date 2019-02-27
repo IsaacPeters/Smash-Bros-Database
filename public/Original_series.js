@@ -9,7 +9,7 @@ $("document").ready(function(){
 		if(i == 0){
 			$(headerCell).addClass('hiddenCol');
 		}
-		else if(i == 7){
+		else if(i == 6){
 			$(headerCell).addClass('updateCell');
 		}
 		header.append(headerCell);
@@ -46,11 +46,6 @@ function loadData(){
 					for(data in json[i]){
 						var newCell = document.createElement('td');
 						newCell.append(json[i][data]);
-						if(data == "date"){
-							var date = $(newCell).text();
-							date = date.substring(0, (date.indexOf('T')));
-							$(newCell).text(date);
-						}
 						if(data == "Id"){
 							$(newCell).addClass('hiddenCol');
 						}
@@ -81,25 +76,19 @@ function loadData(){
 }
 
 
-$('#insert').submit('click',function(event) {
+$('#newSeries').submit('click',function(event) {
+	console.log("here? Her?");
 	$.ajax({
-		url : "/insert",
+		url : '/insert_series',
 		method: "get",
 		dataType: "json",
-		data: $("#insert").serialize(),
+		data: $("#newSeries").serialize(),
 		success: function(){
 			console.log("Loading Data after insert");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
-	$('#exerInput').val(null);
-	$('#dateInput').val(null);
-	$('#repsInput').val(null);
-	$('#weightInput').val(null);
-	$('#unitInput').prop('checked', false);
-	
 	event.preventDefault();
 });
 
@@ -146,64 +135,6 @@ $('#update').submit('click', function(event){
 	$('.updateCell').toggle();
 	
 	event.preventDefault();
-});
-
-$(document).on('click','#submitCSButton',function(){
-	$.ajax({
-		url: '/fill_series',
-		method: "get",
-		dataType: 'json',
-		success: function(data,textStatus,jqXHR){
-			var json = JSON.parse(data.results);
-			
-			$('table #dataRow').each(function(){
-				$(this).remove();
-			});
-			$('table tbody').each(function(){
-				$(this).remove();
-			});
-	
-			var tablebody = document.createElement('tbody');
-			
-			if(json.length){
-				for (var i = 0; i < json.length; i++){
-					var newRow = document.createElement('tr');
-					$('newRow').attr('id','dataRow');
-					for(data in json[i]){
-						var newCell = document.createElement('td');
-						newCell.append(json[i][data]);
-						if(data == "date"){
-							var date = $(newCell).text();
-							date = date.substring(0, (date.indexOf('T')));
-							$(newCell).text(date);
-						}
-						if(data == "Id"){
-							$(newCell).addClass('hiddenCol');
-						}
-						newRow.append(newCell);
-					}
-					var deleteBtn = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
-					$(deleteBtn).text('Delete');
-					newCell.append(deleteBtn);
-					newRow.append(newCell);
-					
-					var edit = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
-					$(edit).text('Edit');
-					newCell.append(edit);
-					newRow.append(newCell);
-					
-					tablebody.append(newRow);
-				}
-				$('#dataDisplay').append(tablebody);
-			}
-		},
-		error: function(ts){console.log("Error in the Get");},
-	});
 });
 
 $(document).on('click','.deleteExer',function(){
