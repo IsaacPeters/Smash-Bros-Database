@@ -40,7 +40,7 @@ app.get('/Characters_to_games',function(req,res){
 
 app.get('/fill_characters',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id', function(err, rows, fields){
+    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id ORDER BY C.Year_added_to_Smash ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -142,6 +142,34 @@ app.get('/fill_dropdown_by_map',function(req,res,next){
 app.get('/fill_smash',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT Id, Name, Year_released FROM Smash_Games', function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/search_games_characters',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT c.Name FROM Characters c JOIN Characters_to_Games cg ON cg.Character_id = c.Id JOIN Smash_Games g ON g.Id = cg.Game_id WHERE g.Name = ?  ',
+	[req.query.game_name], function(err, rows, fields){
+        if(err){
+            console.log("ran into an error");
+            next(err);
+            return;
+        }
+        context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/search_games_maps',function(req,res,next){
+    var context = {};
+    mysql.pool.query('SELECT m.Name FROM Smash_Maps m JOIN Maps_to_Games mg ON mg.Map_id = m.Id JOIN Smash_Games g ON g.Id = mg.Game_id WHERE g.Name = ?  ',
+	[req.query.game_name], function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
