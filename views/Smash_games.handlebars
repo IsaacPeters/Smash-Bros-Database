@@ -12,21 +12,27 @@
     </fieldset>
 </form>
 </br>
-<form>
+<form id = gameSearch>
 	<fieldset>
-		<label for="Check_Smash_Contents">Show the </label>
-		<select name="Check_Smash_Contents" id="Check_Smash_Contents">
+		<label for="check_smash_contents">Show the </label>
+		<select name="check_smash_contents" id="check_smash_contents">
 			<option value="Choose">--Choose One--</option>
-			<option value="Characters">Characters</option>
-			<option value="Maps">Maps</option>
+			<option value="games_characters">Characters</option>
+			<option value="games_maps">Maps</option>
 		</select>
-		<lable for="Smash_Games_Select"> that can be found in the game: </label>
-			<select name="Smash_Games_Select" id="Smash_Games_Select">
+		<label for="smash_games_select"> that can be found in the game: </label>
+			<select name="smash_games_select" id="smash_games_select">
 			<option value="Choose">--Choose One--</option>
 		</select>
-		<input type="button" id="submitCSButton" value="Check Game">
+		<input type="button" id="submitGCMButton" value="Check Game">
 	</fieldset>
 </form>
+</br>
+<div id = searchResults>
+	<h2 id = searchInfo></h1>
+	<ul id = searchPrint></ul>
+	<input type = "button" id = "hideButton" value = "Hide Search">
+</div>
 </br>
 <table id="dataDisplay"> </table>
 <script src="./jquery-3.3.1.js"></script>
