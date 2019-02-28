@@ -14,6 +14,11 @@
 #idUpdate{
 	display:none;
 }
+#searchResults{
+	border: 1px solid;
+	display: none;
+	padding: 10px;
+}
 th{
 	border: solid;
 	background-color: lightgreen;

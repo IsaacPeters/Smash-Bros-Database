@@ -89,7 +89,7 @@ function fillGames(){
 		success: function(data,textStatus,jqXHR){
 			var json = JSON.parse(data.results);
 			if(json.length){
-					var select = $('#Smash_Games_Select');
+					var select = $('#smash_games_select');
 					for (var i = 0; i < json.length; i++){
 						for(data in json[i]){
 							console.log(json[i][data]);
@@ -121,6 +121,53 @@ $('#newSmash').submit('click',function(event) {
 
 	event.preventDefault();
 });
+
+$(document).on('click','#submitGCMButton',function(){
+	var desired = $('#check_smash_contents option:selected').text();
+	var game = $('#smash_games_select option:selected').text();
+	
+	if(desired!="--Choose One--" && game!="--Choose One--"){
+		$('#searchResults').show();
+		$('#searchInfo').empty();
+		$('#searchPrint').empty();
+		$('#searchInfo').append(desired+" found in the game " + game);
+		var url = '';
+		if(desired == "Characters"){
+			url = "/search_games_characters?game_name="+game;
+		}
+		else if(desired == "Maps"){
+			url = "/search_games_maps?game_name="+game;
+		}
+		loadSearch(url);
+	}
+});
+
+$(document).on('click','#hideButton',function(){
+	$('#searchInfo').empty();
+	$('#searchPrint').empty();
+	$('#searchResults').hide();
+});
+
+function loadSearch(x){
+	$.ajax({
+		url: x,
+		method: "get",
+		dataType: 'json',
+		success: function(data,textStatus,jqXHR){
+			var json = JSON.parse(data.results);
+			if(json.length){
+					var search = $('#searchPrint');
+					for (var i = 0; i < json.length; i++){
+						for(data in json[i]){
+							console.log(json[i][data]);
+							search.append("<li>"+json[i][data]);
+						}
+					}
+				}
+		},
+		error: function(ts){console.log("Error in the Get");},
+	});
+}
 
 $(document).on('click','.updateExer',function(){
 	console.log("Changing Windows");
@@ -165,64 +212,6 @@ $('#update').submit('click', function(event){
 	$('.updateCell').toggle();
 	
 	event.preventDefault();
-});
-
-$(document).on('click','#submitCSButton',function(){
-	$.ajax({
-		url: '/fill_series',
-		method: "get",
-		dataType: 'json',
-		success: function(data,textStatus,jqXHR){
-			var json = JSON.parse(data.results);
-			
-			$('table #dataRow').each(function(){
-				$(this).remove();
-			});
-			$('table tbody').each(function(){
-				$(this).remove();
-			});
-	
-			var tablebody = document.createElement('tbody');
-			
-			if(json.length){
-				for (var i = 0; i < json.length; i++){
-					var newRow = document.createElement('tr');
-					$('newRow').attr('id','dataRow');
-					for(data in json[i]){
-						var newCell = document.createElement('td');
-						newCell.append(json[i][data]);
-						if(data == "date"){
-							var date = $(newCell).text();
-							date = date.substring(0, (date.indexOf('T')));
-							$(newCell).text(date);
-						}
-						if(data == "Id"){
-							$(newCell).addClass('hiddenCol');
-						}
-						newRow.append(newCell);
-					}
-					var deleteBtn = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
-					$(deleteBtn).text('Delete');
-					newCell.append(deleteBtn);
-					newRow.append(newCell);
-					
-					var edit = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
-					$(edit).text('Edit');
-					newCell.append(edit);
-					newRow.append(newCell);
-					
-					tablebody.append(newRow);
-				}
-				$('#dataDisplay').append(tablebody);
-			}
-		},
-		error: function(ts){console.log("Error in the Get");},
-	});
 });
 
 $(document).on('click','.deleteExer',function(){

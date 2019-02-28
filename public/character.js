@@ -111,6 +111,20 @@ function fillSeries(){
 	});
 }
 
+$(document).on('click','#submitCSButton',function(){
+	var series = $('#Char_by_series option:selected').text();
+	
+	if(series=="All Series"){
+		var url_string = "/fill_characters"
+	}
+	else{
+		var url_string = "/filter_characters?Series_Name="+series;
+		console.log(url_string);
+	}
+	
+	loadData(url_string);
+	
+});
 
 $('#newCharacter').submit('click',function(event) {
 	$.ajax({
@@ -149,6 +163,8 @@ $(document).on('click','.updateExer',function(){
 });
 
 
+
+
 $('#update').submit('click', function(event){
 	
 	var id = $('#idUpdate').val();
@@ -170,21 +186,6 @@ $('#update').submit('click', function(event){
 	$('.updateCell').toggle();
 	
 	event.preventDefault();
-});
-
-$(document).on('click','#submitCSButton',function(){
-	var series = $('#Char_by_series option:selected').text();
-	
-	if(series=="All Series"){
-		var url_string = "/fill_characters"
-	}
-	else{
-		var url_string = "/filter_characters?Series_Name="+series;
-		console.log(url_string);
-	}
-	
-	loadData(url_string);
-	
 });
 
 $(document).on('click','.deleteExer',function(){
