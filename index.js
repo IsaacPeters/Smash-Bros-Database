@@ -66,7 +66,8 @@ app.get('/filter_characters',function(req,res,next){
 
 app.get('/insert_Character',function(req,res,next){
     var context = {};
-	mysql.pool.query('INSERT INTO Characters (`Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series_id`) VALUES (?, ?, ?, ?,(SELECT Id FROM Original_Series WHERE Name = ?))', [req.query.name, req.query.species, req.query.year_released, req.query.smash_year, req.query.Series_dropdown], function(err, result){
+	mysql.pool.query('INSERT INTO Characters (`Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series_id`) VALUES (?, ?, ?, ?,(SELECT Id FROM Original_Series WHERE Name = ?))', 
+        [req.query.name, req.query.species, req.query.year_released, req.query.smash_year, req.query.Series_dropdown], function(err, result){
 		if(err){
 			next(err);
 			return;
@@ -84,6 +85,54 @@ app.get('/fill_dropdown_by_character',function(req,res,next){
             return;
         }
         context.results = JSON.stringify(rows);
+        res.send(context);
+    });
+});
+
+app.get('/update_character',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT * FROM Characters WHERE id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        if(result.length == 1){
+            var curVals = result[0];
+            mysql.pool.query("UPDATE Characters c SET c.Name=?, c.Species=?, c.Year_Released=?, c.Year_added_to_Smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
+            [req.query.name || curVals.name, req.query.species || curVals.species, req.query.year_released || curVals.year_released, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown , req.query.id],
+            function(err, result){
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = "Updated " + result.changedRows + " rows.";
+            res.render('home',context);
+            });
+        }
+    });
+});
+
+
+app.get('/delete_character',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Characters WHERE Id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
+app.get('/delete_character_relation',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Characters_to_Games WHERE Character_id=?", [req.query.character_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
         res.send(context);
     });
 });
@@ -125,6 +174,31 @@ app.get('/insert_map',function(req,res,next){
 		res.send(context);
 	});
 });
+
+app.get('/delete_map',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Smash_Maps WHERE Id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
+app.get('/delete_map_relation',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Maps_to_Games WHERE Map_id=?", [req.query.map_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
 
 app.get('/fill_dropdown_by_map',function(req,res,next){
     var context = {};
@@ -290,42 +364,6 @@ app.get('/insert_mg',function(req,res,next){
 		}
 		res.send(context);
 	});
-});
-
-app.get('/update',function(req,res,next){
-    var context = {};
-    mysql.pool.query("SELECT * FROM workouts WHERE id=?", [req.query.id], function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-        if(result.length == 1){
-            var curVals = result[0];
-            mysql.pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ",
-            [req.query.name || curVals.name, req.query.reps || curVals.reps, req.query.weight || curVals.weight, req.query.date || curVals.date, req.query.lbs || curVals.lbs, req.query.id],
-            function(err, result){
-            if(err){
-                next(err);
-                return;
-            }
-            context.results = "Updated " + result.changedRows + " rows.";
-            res.render('home',context);
-            });
-        }
-    });
-});
-
-app.get('/delete',function(req,res,next){
-    var context = {};
-    //console.log(req.query);
-    mysql.pool.query("DELETE FROM Characters WHERE Id=?", [req.query.id], function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-        context.results = "Results" + result.removeId;
-        res.send(context);
-    });
 });
 
 app.use(function(req,res){
