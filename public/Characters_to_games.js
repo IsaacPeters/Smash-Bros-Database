@@ -48,7 +48,7 @@ function loadData(){
 					}
 					var deleteBtn = document.createElement('button');
 					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).addClass("deleteCG");
 					$(deleteBtn).text('Delete');
 					newCell.append(deleteBtn);
 					newRow.append(newCell);
@@ -115,17 +115,22 @@ function fillDropdowns(){
 }
 
 $('#newCGRelationship').submit('click',function(event) {
-	$.ajax({
-		url : '/insert_cg',
-		method: "get",
-		dataType: "json",
-		data: $("#newCGRelationship").serialize(),
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
+	var character = $('#smash_characters_dropdown option:selected').text();
+	var game = $('#smash_games_dropdown option:selected').text();
+	
+	if(character!="No Character" && game!="No Game"){
+		$.ajax({
+			url : '/insert_cg',
+			method: "get",
+			dataType: "json",
+			data: $("#newCGRelationship").serialize(),
+			success: function(){
+				console.log("Loading Data after insert");
+				loadData();
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});
+	}
 	event.preventDefault();
 });
 
@@ -174,17 +179,19 @@ $('#update').submit('click', function(event){
 	event.preventDefault();
 });
 
-$(document).on('click','.deleteExer',function(){
-	var id = $(this).closest('tr').find('td:eq(0)').text();
-	console.log(id);
+$(document).on('click','.deleteCG',function(){
+	var Character_id = $(this).closest('tr').find('td:eq(0)').text();
+	var Game_id = $(this).closest('tr').find('td:eq(1)').text();
+
+	console.log(Character_id);
+	console.log(Game_id);
 	
 	$.ajax({
-		url : "/delete?id="+id,
+		url : "/delete_cg?Character_id="+Character_id+"&Game_id="+Game_id,
 		success: function(){
-			console.log("Loading Data after insert");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
 });
