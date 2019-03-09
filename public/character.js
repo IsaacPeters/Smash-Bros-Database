@@ -46,7 +46,6 @@ function loadData(x){
 					$('newRow').attr('id','dataRow');
 					for(data in json[i]){
 						var newCell = document.createElement('td');
-						console.log(json[i][data]);
 						newCell.append(json[i][data]);
 						if(data == "date"){
 							var date = $(newCell).text();
@@ -60,7 +59,7 @@ function loadData(x){
 					}
 					var deleteBtn = document.createElement('button');
 					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).addClass("deleteCharacter");
 					$(deleteBtn).text('Delete');
 					newCell.append(deleteBtn);
 					newRow.append(newCell);
@@ -68,7 +67,7 @@ function loadData(x){
 					var edit = document.createElement('button');
 					var newCell = document.createElement('td');
 					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
+					$(edit).addClass('updateChar');
 					$(edit).text('Edit');
 					newCell.append(edit);
 					newRow.append(newCell);
@@ -92,17 +91,21 @@ function fillSeries(){
 			if(json.length){
 					var add = $('#Series_dropdown');
 					var select = $('#Char_by_series');
+					var update = $('#updateSeriesDropdown')
 					for (var i = 0; i < json.length; i++){
 						for(data in json[i]){
-							console.log(json[i][data]);
 							var option = document.createElement('option');
 							var option2 = document.createElement('option');
+							var option3 = document.createElement('option');
 							option.value = json[i][data];
 							option.innerHTML = json[i][data];
 							option2.value = json[i][data];
 							option2.innerHTML = json[i][data];
+							option3.value = json[i][data];
+							option3.innerHTML = json[i][data];
 							add.append(option);
 							select.append(option2);
+							update.append(option);
 						}
 					}
 				}
@@ -119,7 +122,6 @@ $(document).on('click','#submitCSButton',function(){
 	}
 	else{
 		var url_string = "/filter_characters?Series_Name="+series;
-		console.log(url_string);
 	}
 	
 	loadData(url_string);
@@ -127,78 +129,115 @@ $(document).on('click','#submitCSButton',function(){
 });
 
 $('#newCharacter').submit('click',function(event) {
-	$.ajax({
-		url : "/insert_Character",
-		method: "get",
-		dataType: "json",
-		data: $("#newCharacter").serialize(),
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData('/fill_characters');
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});	
-	event.preventDefault();
-});
-
-$(document).on('click','.updateExer',function(){
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
-	$('.updateCell').toggle();
-	
-	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
-	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
-	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
-	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
-	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
-	
-	var unit = $(this).closest('tr').find('td:eq(5)').text();
-	if(unit == "Pounds"){
-		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
+	if($('#Series_dropdown').val() == "no_series"){
+		window.location.href = 'Original_series';
 	}
 	else{
-		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
+		$.ajax({
+			url : "/insert_Character",
+			method: "get",
+			dataType: "json",
+			data: $("#newCharacter").serialize(),
+			success: function(){
+				console.log("Loading Data after insert");
+				loadData('/fill_characters');
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});	
 	}
-});
-
-
-
-
-$('#update').submit('click', function(event){
-	
-	var id = $('#idUpdate').val();
-	$.ajax({
-		url: '/update?id='+id+'&',
-		method: "get",
-		dataType: "json",
-		data: $("#update").serialize(),
-		success: function(){
-			console.log("Updating Data");
-			loadData('/fill_characters');
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
-
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
-	$('.updateCell').toggle();
-	
 	event.preventDefault();
 });
 
-$(document).on('click','.deleteExer',function(){
+$(document).on('click','.updateChar',function(){
+	console.log("Changing Windows");
+	$('#updateCharacter').toggle();
+	$('#newCharacter').toggle();
+	$('.updateCell').toggle();
+	$('.deleteCharacter').toggle();
+
+	console.log($(this).closest('tr').find('td:eq(4)').text());
+
+	$('#idUpdateCharacter').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#charNameUpdate').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#charSpeciesUpdate').val($(this).closest('tr').find('td:eq(2)').text());
+	$('#charReleaseUpdate').val($(this).closest('tr').find('td:eq(3)').text());
+	$('#charSmashUpdate').val($(this).closest('tr').find('td:eq(4)').text());
+	$('#updateSeriesDropdown').val($(this).closest('tr').find('td:eq(5)').text());
+	
+});
+
+$(document).on('click','#cancelUpdateCharacter',function(){
+	console.log("Changing Windows");
+	$('#updateCharacter').toggle();
+	$('#newCharacter').toggle();
+	$('.updateCell').toggle();
+	$('.deleteCharacter').toggle();
+});
+
+$('#updateCharacter').submit('click', function(event){
+	if($('#updateSeriesDropdown').val() == "no_series"){
+		window.location.href = 'Original_series';
+	}
+	else{
+		var id = $('#idUpdateCharacter').val();
+		console.log(id);
+		$.ajax({
+			url: '/update_character?id='+id+'&',
+			method: "get",
+			dataType: "json",
+			data: $("#updateCharacter").serialize(),
+			success: function(){
+				console.log("Updating Data");
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});
+
+		//Error Work Around
+		window.location.href = 'Characters';
+
+		$('#updateCharacter').toggle();
+		$('#newCharacter').toggle();
+		$('.updateCell').toggle();
+		$('.deleteCharacter').toggle();
+	}
+	event.preventDefault();
+});
+
+$(document).on('click','.deleteCharacter',function(){
+	$('#deleteChar').show();
 	var id = $(this).closest('tr').find('td:eq(0)').text();
+	var name = $(this).closest('tr').find('td:eq(1)').text();
+
+	$('#deleteCharId').text(id);
+	console.log($('#deleteCharId').text());
+	$('#deleteCharName').text(name);
+});
+
+$(document).on('click','#cancelDeleteCharacter',function(){
+	$('#deleteChar').hide();
+});
+
+$(document).on('click','#submitDeleteCharacter',function(){
+	var id = $('#deleteCharId').text();
 	console.log(id);
 	
 	$.ajax({
-		url : "/delete?id="+id,
+		url : "/delete_character_relation?character_id="+id,
 		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
+			console.log("Loading Data after delete");
+			loadData('/fill_characters');
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
+
+	$.ajax({
+		url : "/delete_character?id="+id,
+		success: function(){
+			console.log("Loading Data after delete");
+			loadData('/fill_characters');
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+
+	$('#deleteChar').hide();
 });
