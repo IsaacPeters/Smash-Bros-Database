@@ -59,7 +59,7 @@ function loadData(x){
 					}
 					var deleteBtn = document.createElement('button');
 					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).addClass("deleteMap");
 					$(deleteBtn).text('Delete');
 					newCell.append(deleteBtn);
 					newRow.append(newCell);
@@ -111,17 +111,22 @@ function fillSeries(){
 }
 
 $('#newMap').submit('click',function(event) {
-	$.ajax({
-		url : "/insert_map",
-		method: "get",
-		dataType: "json",
-		data: $("#newMap").serialize(),
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData('/fill_maps');
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});	
+	if($('#map_series_dropdown').val() == "no_series"){
+		window.location.href = 'Original_series';
+	}
+	else{
+		$.ajax({
+			url : "/insert_map",
+			method: "get",
+			dataType: "json",
+			data: $("#newMap").serialize(),
+			success: function(){
+				console.log("Loading Data after insert");
+				loadData('/fill_maps');
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});	
+	}
 	event.preventDefault();
 });
 
@@ -197,4 +202,42 @@ $(document).on('click','.deleteExer',function(){
 		error: function(ts){console.log(ts.responseText);},
 	});
 	
+});
+
+$(document).on('click','.deleteMap',function(){
+	$('#deleteMap').show();
+	var id = $(this).closest('tr').find('td:eq(0)').text();
+	var name = $(this).closest('tr').find('td:eq(1)').text();
+
+	$('#deleteMapId').text(id);
+	$('#deleteMapName').text(name);
+});
+
+$(document).on('click','#cancelDeleteMap',function(){
+	$('#deleteMap').hide();
+});
+
+$(document).on('click','#submitDeleteMap',function(){
+	var id = $('#deleteMapId').text();
+	console.log(id);
+
+	$.ajax({
+		url : "/delete_map_relation?map_id="+id,
+		success: function(){
+			console.log("Loading Data after delete");
+			loadData('/fill_maps');
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+
+	$.ajax({
+		url : "/delete_map?id="+id,
+		success: function(){
+			console.log("Loading Data after delete");
+			loadData('/fill_maps');
+		},
+		error: function(ts){console.log(ts.responseText);},
+	});
+
+	$('#deleteMap').hide();
 });
