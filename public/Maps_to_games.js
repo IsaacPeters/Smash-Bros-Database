@@ -133,7 +133,7 @@ $(document).on('click','.updateExer',function(){
 	$('#update').toggle();
 	$('#insert').toggle();
 	$('.updateCell').toggle();
-	
+
 	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
 	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
 	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
