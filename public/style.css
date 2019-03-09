@@ -4,14 +4,20 @@
 .hiddenCell{
 	display:none;
 }
-#insert{
+.insert{
 	display: block;
 }
-#update{
+.updates{
 	background-color: #C0C0C0;
 	display: none;
 }
-#idUpdate{
+.idUpdate{
+	display:none;
+}
+.deleteForms{
+	display:none;
+}
+.deleteIds{
 	display:none;
 }
 #searchResults{
