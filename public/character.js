@@ -105,7 +105,7 @@ function fillSeries(){
 							option3.innerHTML = json[i][data];
 							add.append(option);
 							select.append(option2);
-							update.append(option);
+							update.append(option3);
 						}
 					}
 				}
