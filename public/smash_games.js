@@ -59,7 +59,7 @@ function loadData(){
 					}
 					var deleteBtn = document.createElement('button');
 					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).addClass("deleteGame");
 					$(deleteBtn).text('Delete');
 					newCell.append(deleteBtn);
 					newRow.append(newCell);
@@ -214,30 +214,40 @@ $('#update').submit('click', function(event){
 	event.preventDefault();
 });
 
-$(document).on('click','.deleteExer',function(){
+$(document).on('click','.deleteGame',function(){
+	$('#deleteGame').show();
 	var id = $(this).closest('tr').find('td:eq(0)').text();
+	var name = $(this).closest('tr').find('td:eq(1)').text();
+
+	$('#deleteGameId').text(id);
+	$('#deleteGameName').text(name);
+});
+
+$(document).on('click','#cancelDeleteGame',function(){
+	$('#deleteGame').hide();
+});
+
+$(document).on('click','#submitDeleteGame',function(){
+	var id = $('#deleteGameId').text();
 	console.log(id);
 	
 	$.ajax({
-		url : "/delete?id="+id,
+		url : "/delete_smash_relation?game_id="+id,
 		success: function(){
-			console.log("Loading Data after insert");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
-});
 
-$(document).on('click','.clearBtn',function(){
-	
 	$.ajax({
-		url : "/reset-table",
+		url : "/delete_smash?id="+id,
 		success: function(){
-			console.log("Resetting Data");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
+
+	$('#deleteGame').hide();
 });
