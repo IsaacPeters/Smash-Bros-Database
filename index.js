@@ -112,7 +112,6 @@ app.get('/update_character',function(req,res,next){
     });
 });
 
-
 app.get('/delete_character',function(req,res,next){
     var context = {};
     mysql.pool.query("DELETE FROM Characters WHERE Id=?", [req.query.id], function(err, result){
@@ -173,6 +172,29 @@ app.get('/insert_map',function(req,res,next){
 		}
 		res.send(context);
 	});
+});
+
+app.get('/update_map',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT * FROM Smash_maps WHERE id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        if(result.length == 1){
+            var curVals = result[0];
+            mysql.pool.query("UPDATE Smash_maps c SET c.Name=?, c.Year_added_to_smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
+            [req.query.map_name || curVals.map_name, req.query.map_smash_year || curVals.map_smash_year, req.query.map_series_dropdown  || curVals.map_series_dropdown, req.query.id],
+            function(err, result){
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = "Updated " + result.changedRows + " rows.";
+            res.render('home',context);
+            });
+        }
+    });
 });
 
 app.get('/delete_map',function(req,res,next){

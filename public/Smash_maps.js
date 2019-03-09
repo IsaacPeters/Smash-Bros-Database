@@ -67,7 +67,7 @@ function loadData(x){
 					var edit = document.createElement('button');
 					var newCell = document.createElement('td');
 					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
+					$(edit).addClass('updateMap');
 					$(edit).text('Edit');
 					newCell.append(edit);
 					newRow.append(newCell);
@@ -130,27 +130,66 @@ $('#newMap').submit('click',function(event) {
 	event.preventDefault();
 });
 
-$(document).on('click','.updateExer',function(){
+$(document).on('click','#cancelUpdateMap',function(){
 	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+	$('#updateMap').toggle();
+	$('#newMap').toggle();
 	$('.updateCell').toggle();
-	
-	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
-	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
-	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
-	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
-	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
-	
-	var unit = $(this).closest('tr').find('td:eq(5)').text();
-	if(unit == "Pounds"){
-		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
-	}
-	else{
-		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
-	}
+	$('.deleteMap').toggle();
 });
 
+$(document).on('click','.updateMap',function(){
+	console.log("Changing Windows");
+	$('#updateMap').toggle();
+	$('#newMap').toggle();
+	$('.updateCell').toggle();
+	$('.deleteMap').toggle();
+
+	console.log($(this).closest('tr').find('td:eq(4)').text());
+
+	$('#idUpdateMap').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#mapNameUpdate').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#mapSmashUpdate').val($(this).closest('tr').find('td:eq(2)').text());
+	$('#updateSeriesDropdown').val($(this).closest('tr').find('td:eq(3)').text());
+	
+});
+
+$(document).on('click','#cancelUpdateMap',function(){
+	console.log("Changing Windows");
+	$('#updateMap').toggle();
+	$('#newMap').toggle();
+	$('.updateCell').toggle();
+	$('.deleteMap').toggle();
+});
+
+$('#updateMap').submit('click', function(event){
+	if($('#updateSeriesDropdown').val() == "no_series"){
+		window.location.href = 'Original_series';
+	}
+	else{
+		var id = $('#idUpdateMap').val();
+		console.log(id);
+		$.ajax({
+			url: '/update_map?id='+id+'&',
+			method: "get",
+			dataType: "json",
+			data: $("#updateMap").serialize(),
+			success: function(){
+				console.log("Updating Data");
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});
+
+		//Error Work Around
+		window.location.href = 'Smash_maps';
+
+		$('#updateMap').toggle();
+		$('#newMap').toggle();
+		$('.updateCell').toggle();
+		$('.deleteMap').toggle();
+	}
+	event.preventDefault();
+});
 
 $('#update').submit('click', function(event){
 	

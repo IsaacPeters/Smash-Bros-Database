@@ -1,5 +1,5 @@
 {{> navigation}}
-<form id = newMap>
+<form id = "newMap">
     <fieldset>
         <legend>Add Smash Map</legend>
         <label for="Name">Name</label>
@@ -14,6 +14,25 @@
 		</select>
         <br><br>
         <input type="submit" id="submitButton" value="Add New Map">
+    </fieldset>
+</form>
+<form class = "updates" id="updateMap">
+    <fieldset>
+        <legend>Update the Map</legend>
+        <input type="number" class = "idUpdate" id ="idUpdateMap">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="mapNameUpdate" required>
+        <br>
+        <label for="Smash_year">Year added to Smash</label>
+        <input type="number" name="smash_year" id="mapSmashUpdate" required>
+        <br>
+        <label for="Series_id">Original Series: </label>
+        <select name="Series_dropdown" id="updateSeriesDropdown">
+            <option value="no_series">Create New Series</option>
+        </select>
+        <br><br>
+        <input type="submit" id="updateMap" value="Update Map">
+        <input type="button" id="cancelUpdateMap" value="Cancel Update">
     </fieldset>
 </form>
 </br>
