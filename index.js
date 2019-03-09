@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 1920);
+app.set('port', 3141);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -279,9 +279,33 @@ app.get('/fill_dropdown_by_smash',function(req,res,next){
     });
 });
 
+app.get('/delete_smash',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Smash_Games WHERE Id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
+app.get('/delete_smash_relation',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE cg, mg FROM Characters_to_Games cg JOIN Maps_to_Games mg ON cg.Game_id = mg.Game_id WHERE mg.Game_id = ?", [req.query.game_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
 app.get('/fill_series',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT Name, First_game, Creation_year, Number_of_games FROM Original_Series', function(err, rows, fields){
+    mysql.pool.query('SELECT Id, Name, First_game, Creation_year, Number_of_games FROM Original_Series', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -316,6 +340,37 @@ app.get('/fill_dropdown_by_series',function(req,res,next){
     });
 });
 
+app.get('/delete_series',function(req,res,next){
+    var context = {};
+    mysql.pool.query("DELETE FROM Original_Series WHERE Id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+    });
+});
+
+app.get('/remove_series_relation',function(req,res,next){
+    var context = {};
+    mysql.pool.query("UPDATE Characters SET Series_id = 0 WHERE Series_id = ?", [req.query.series_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        mysql.pool.query("UPDATE Smash_Maps SET Series_id = 0 WHERE Series_id = ?", [req.query.series_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        context.results = "Results" + result.removeId;
+        res.send(context);
+        });
+    });
+});
+
+
 app.get('/fill_cg',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT c.Name AS Character_Name, g.Name AS Game_Name FROM Characters c JOIN Characters_to_Games cg ON c.Id = cg.Character_id JOIN Smash_Games g ON g.Id = cg.Game_id', function(err, rows, fields){
@@ -341,6 +396,19 @@ app.get('/insert_cg',function(req,res,next){
 	});
 });
 
+app.get('/delete_cg',function(req,res,next){
+    var context = {};
+    mysql.pool.query('DELETE FROM Characters_to_Games WHERE Character_id = (SELECT Id FROM Characters WHERE Name = ?) AND Game_id = (SELECT Id FROM Smash_Games WHERE Name = ?)', 
+    [req.query.Character_id, req.query.Game_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        res.send(context);
+    });
+});
+
+
 app.get('/fill_mg',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id', function(err, rows, fields){
@@ -364,6 +432,18 @@ app.get('/insert_mg',function(req,res,next){
 		}
 		res.send(context);
 	});
+});
+
+app.get('/delete_mg',function(req,res,next){
+    var context = {};
+    mysql.pool.query('DELETE FROM Maps_to_Games WHERE Map_id = (SELECT Id FROM Smash_Maps WHERE Name = ?) AND Game_id = (SELECT Id FROM Smash_Games WHERE Name = ?)', 
+    [req.query.Map_id, req.query.Game_id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        res.send(context);
+    });
 });
 
 app.use(function(req,res){
