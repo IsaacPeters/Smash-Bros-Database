@@ -3,10 +3,10 @@
     <fieldset>
         <legend>Add Smash Map</legend>
         <label for="Name">Name</label>
-        <input type="text" name="map_name" id="map_name">
+        <input type="text" name="map_name" id="map_name" required>
         <br>
         <label for="Year_added_to_smash">Year Added to Smash</label>
-        <input type="number" name="map_smash_year" id="map_smash_year">
+        <input type="number" name="map_smash_year" id="map_smash_year" required>
         <br>
 		<label for="Series_id">Original Series: </label>
 		<select name="map_series_dropdown" id="map_series_dropdown">
@@ -25,6 +25,14 @@
 		</select>
 		<input type="button" id="submitMSButton" value="Check Series">
 	</fieldset>
+</form>
+<form class = "deleteForms" id = "deleteMap">
+    <fieldset>
+        <label for="Map_delete">Are you sure you would like to delete <b><a id="deleteMapName"></a></b>? All relationships associated with the map will be removed too!</label><a class = "deleteIds" id = "deleteMapId"></a>
+        <br><br>
+        <input type="button" id="submitDeleteMap" value="Delete Map">
+        <input type="button" id="cancelDeleteMap" value="Cancel Delete">        
+    </fieldset>
 </form>
 </br>
 <table id="dataDisplay"> </table>
