@@ -1,6 +1,6 @@
 $("document").ready(function(){
 	var tablehead = document.createElement('thead');
-	var headers = ["Id", "Name", "Year Added to Smash", "Series Id"];
+	var headers = ["Id", "Name", "Year Added to Smash", "Original Series"];
 	var header = document.createElement('tr');
 	
 	for (i in headers){
