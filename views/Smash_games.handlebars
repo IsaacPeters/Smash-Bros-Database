@@ -3,10 +3,10 @@
     <fieldset>
         <legend>Add a Smash Game</legend>
         <label for="name">Name</label>
-        <input type="text" name="smash_name" id="smash_name">
+        <input type="text" name="smash_name" id="smash_name" required>
         <br>
         <label for="Year_released">Year Released</label>
-        <input type="number" name="smash_year_released" id="smash_year_released">
+        <input type="number" name="smash_year_released" id="smash_year_released" required>
         <br>
         <input type="submit" id="submitButton" value="Add Game">
     </fieldset>
@@ -27,13 +27,23 @@
 		<input type="button" id="submitGCMButton" value="Check Game">
 	</fieldset>
 </form>
-</br>
+<br>
 <div id = searchResults>
 	<h2 id = searchInfo></h1>
 	<ul id = searchPrint></ul>
 	<input type = "button" id = "hideButton" value = "Hide Search">
 </div>
-</br>
+<br>
+<form class = "deleteForms" id = "deleteGame">
+    <fieldset>
+        <label for="Game_delete">Are you sure you would like to delete <b><a id="deleteGameName"></a></b>? All relationships associated with the game will be removed too!</label><a class = "deleteIds" id = "deleteGameId"></a>
+        <br><br>
+        <input type="button" id="submitDeleteGame" value="Delete Game">
+        <input type="button" id="cancelDeleteGame" value="Cancel Delete">        
+    </fieldset>
+</form>
+<br>
+
 <table id="dataDisplay"> </table>
 <script src="./jquery-3.3.1.js"></script>
 <script src="./smash_games.js"></script>
