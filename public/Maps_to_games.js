@@ -47,7 +47,7 @@ function loadData(){
 					}
 					var deleteBtn = document.createElement('button');
 					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
+					$(deleteBtn).addClass("deleteMG");
 					$(deleteBtn).text('Delete');
 					newCell.append(deleteBtn);
 					newRow.append(newCell);
@@ -114,17 +114,22 @@ function fillDropdowns(){
 }
 
 $('#newMGRelationship').submit('click',function(event) {
-	$.ajax({
-		url : '/insert_mg',
-		method: "get",
-		dataType: "json",
-		data: $("#newMGRelationship").serialize(),
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
+	var map = $('#smash_maps_dropdown option:selected').text();
+	var game = $('#smash_games_dropdown option:selected').text();
+	
+	if(map!="No Map" && game!="No Game"){
+		$.ajax({
+			url : '/insert_mg',
+			method: "get",
+			dataType: "json",
+			data: $("#newMGRelationship").serialize(),
+			success: function(){
+				console.log("Loading Data after insert");
+				loadData();
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});
+	}
 	event.preventDefault();
 });
 
@@ -173,18 +178,19 @@ $('#update').submit('click', function(event){
 	event.preventDefault();
 });
 
-$(document).on('click','.deleteExer',function(){
-	var id = $(this).closest('tr').find('td:eq(0)').text();
-	console.log(id);
-	
+$(document).on('click','.deleteMG',function(){
+	var Map_id = $(this).closest('tr').find('td:eq(0)').text();
+	var Game_id = $(this).closest('tr').find('td:eq(1)').text();
+
+	console.log(Map_id);
+	console.log(Game_id);
+
 	$.ajax({
-		url : "/delete?id="+id,
+		url : "/delete_mg?Map_id="+Map_id+"&Game_id="+Game_id,
 		success: function(){
-			console.log("Loading Data after insert");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
 });
-
