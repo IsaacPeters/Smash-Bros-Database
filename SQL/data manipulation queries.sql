@@ -46,14 +46,35 @@ SELECT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Ga
 -- delete value form Characters table
 DELETE FROM Characters WHERE Id = :character_id
 
+--delete all realtionships with a character that is being deleted
+DELETE FROM Characters_to_Games WHERE Character_id=:character_id;
+
 --delete value from Smash_Maps table
 DELETE FROM Smash_Maps WHERE Id = :map_id
+
+--delete all relationships with a map that is being deleted
+DELETE FROM Maps_to_Games WHERE Map_id=:map_id
 
 --delete value from Original_Series table
 DELETE FROM Original_Series WHERE Id = :series_id;
 
+--update all characters that have a series that is being deleted
+UPDATE Characters SET Series_id = 0 WHERE Series_id = :series_id
+
+--update all maps that have a series this is being deleted
+UPDATE Smash_Maps SET Series_id = 0 WHERE Series_id = :series_id
+
 --delete value from Smash_Games table
 DELETE FROM Smash_Games WHERE Id = :game_id;
+
+--delete all relationships (both Characters and Maps) with a game that is being deleted
+DELETE cg, mg FROM Characters_to_Games cg JOIN Maps_to_Games mg ON cg.Game_id = mg.Game_id WHERE mg.Game_id = :game_id;
+
+--delete relationship from Characters_to_Games
+DELETE FROM Characters_to_Games WHERE Character_id = (SELECT Id FROM Characters WHERE Name = :character_name) AND Game_id = (SELECT Id FROM Smash_Games WHERE Name = :game_name);
+
+--delete relationship from Maps_to_Games
+DELETE FROM Maps_to_Games WHERE Map_id = (SELECT Id FROM Smash_Maps WHERE Name = :map_name) AND Game_id = (SELECT Id FROM Smash_Games WHERE Name = :game_name);
 
 --Insert a new Character
 INSERT INTO `Characters` (`Name`, `Species`, `Year_released`, `Year_added_to_Smash`, `Series_id`) VALUES (:character_name, :character_species, :character_creation_year, :character_smash_release, (SELECT Id FROM Original_Series WHERE Name = :character_series_name));
@@ -77,9 +98,7 @@ INSERT INTO Maps_to_Games (`Map_id`, `Game_id`) VALUES ((SELECT Id FROM Smash_Ma
 --  into our project
 
 -- Update Character
-"UPDATE Characters SET Name=?, Species=?, Year_released=?, Smash_year=?, Series_id=? WHERE id=?",
-    [:NameInput || currentName, :SpeciesInput || currentSpecies, :Year_releasedInput || currentYear_released, :Smash_yearInput || currentSmash_year, :Series_id_from_dropdownInput || currentSeries_id, :idToUpdate]
-
+UPDATE Characters c SET c.Name=:character_name, c.Species=character_species, c.Year_Released=character_creation_year, c.Year_added_to_Smash=character_smash_release, Series_id=(SELECT Id FROM Original_Series WHERE Name = Series_id) WHERE id= character_id; 
 -- Update Original Series
 "UPDATE Original_series SET Name=?, First_game=?, Creation_year=?, Number_of_games=? WHERE id=?",
     [:NameInput || currentName, :First_gameInput || currentFirst_game, :Creation_yearInput || currentCreation_year, :Number_of_gamesInput || currentNumber_of_games, :idToUpdate]
