@@ -1,6 +1,6 @@
 $("document").ready(function(){
 	var tablehead = document.createElement('thead');
-	var headers = ["Id", "Name", "First_game", "Creation_year", "Number_of_games"];
+	var headers = ["Id", "Name", "First Game", "Creation Year", "Number of Games"];
 	var header = document.createElement('tr');
 	
 	for (i in headers){
