@@ -3,23 +3,48 @@
     <fieldset>
         <legend>Add a Character</legend>
         <label for="name">Name</label>
-        <input type="text" name="name" id="name">
+        <input type="text" name="name" id="name" required>
         <br>
 		<label for="species">Species</label>
-        <input type="text" name="species" id="species">
+        <input type="text" name="species" id="species" required>
         <br>
         <label for="Year_released">Year Released</label>
-        <input type="number" name="year_released" id="year_released">
+        <input type="number" name="year_released" id="year_released" required>
         <br>
         <label for="Smash_year">Year added to Smash</label>
-        <input type="number" name="smash_year" id="smash_year">
+        <input type="number" name="smash_year" id="smash_year" required>
         <br>
 		<label for="Series_id">Original Series: </label>
 		<select name="Series_dropdown" id="Series_dropdown">
 			<option value="no_series">Create New Series</option>
 		</select>
-        <br>
+        <br><br>
         <input type="submit" id="newCharacter" value="Add Character">
+    </fieldset>
+</form>
+<form class = "updates" id="updateCharacter">
+    <fieldset>
+        <legend>Update the Character</legend>
+        <input type="number" class = "idUpdate" id ="idUpdateCharacter">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="charNameUpdate" required>
+        <br>
+        <label for="species">Species</label>
+        <input type="text" name="species" id="charSpeciesUpdate" required>
+        <br>
+        <label for="Year_released">Year Released</label>
+        <input type="number" name="year_released" id="charReleaseUpdate" required>
+        <br>
+        <label for="Smash_year">Year added to Smash</label>
+        <input type="number" name="smash_year" id="charSmashUpdate" required>
+        <br>
+        <label for="Series_id">Original Series: </label>
+        <select name="Series_dropdown" id="updateSeriesDropdown">
+            <option value="no_series">Create New Series</option>
+        </select>
+        <br><br>
+        <input type="submit" id="updateCharacter" value="Update Character">
+        <input type="button" id="cancelUpdateCharacter" value="Cancel Update">
     </fieldset>
 </form>
 </br>
@@ -31,6 +56,14 @@
 		</select>
 		<input type="button" id="submitCSButton" value="Check Series">
 	</fieldset>
+</form>
+<form class = "deleteForms" id = "deleteChar">
+    <fieldset>
+        <label for="Char_delete">Are you sure you would like to delete <b><a id="deleteCharName"></a></b>? All relationships associated with the character will be removed too!</label><a class = "deleteIds" id = "deleteCharId"></a>
+        <br><br>
+        <input type="button" id="submitDeleteCharacter" value="Delete Character">
+        <input type="button" id="cancelDeleteCharacter" value="Cancel Delete">        
+    </fieldset>
 </form>
 </br>
 <table id="dataDisplay"> </table>
