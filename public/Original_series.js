@@ -51,20 +51,23 @@ function loadData(){
 						}
 						newRow.append(newCell);
 					}
-					var deleteBtn = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteExer");
-					$(deleteBtn).text('Delete');
-					newCell.append(deleteBtn);
-					newRow.append(newCell);
-					
-					var edit = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
-					$(edit).text('Edit');
-					newCell.append(edit);
-					newRow.append(newCell);
+
+					if(i != 0){
+						var deleteBtn = document.createElement('button');
+						var newCell = document.createElement('td');
+						$(deleteBtn).addClass("deleteSeries");
+						$(deleteBtn).text('Delete');
+						newCell.append(deleteBtn);
+						newRow.append(newCell);
+						
+						var edit = document.createElement('button');
+						var newCell = document.createElement('td');
+						$(newCell).addClass('updateCell');
+						$(edit).addClass('updateExer');
+						$(edit).text('Edit');
+						newCell.append(edit);
+						newRow.append(newCell);
+					}
 					
 					tablebody.append(newRow);
 				}
@@ -137,30 +140,42 @@ $('#update').submit('click', function(event){
 	event.preventDefault();
 });
 
-$(document).on('click','.deleteExer',function(){
+$(document).on('click','.deleteSeries',function(){
+	$('#deleteSeries').show();
 	var id = $(this).closest('tr').find('td:eq(0)').text();
+	var name = $(this).closest('tr').find('td:eq(1)').text();
+
+	$('#deleteSeriesId').text(id);
+	console.log(id);
+	$('#deleteSeriesName').text(name);
+	console.log(name);
+});
+
+$(document).on('click','#cancelDeleteSeries',function(){
+	$('#deleteSeries').hide();
+});
+
+$(document).on('click','#submitDeleteSeries',function(){
+	var id = $('#deleteSeriesId').text();
 	console.log(id);
 	
 	$.ajax({
-		url : "/delete?id="+id,
+		url : "/remove_series_relation?series_id="+id,
 		success: function(){
-			console.log("Loading Data after insert");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
-});
 
-$(document).on('click','.clearBtn',function(){
-	
 	$.ajax({
-		url : "/reset-table",
+		url : "/delete_series?id="+id,
 		success: function(){
-			console.log("Resetting Data");
+			console.log("Loading Data after delete");
 			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-	
+
+	$('#deleteSeries').hide();
 });
