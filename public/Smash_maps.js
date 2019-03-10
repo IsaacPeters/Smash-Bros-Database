@@ -89,22 +89,26 @@ function fillSeries(){
 		success: function(data,textStatus,jqXHR){
 			var json = JSON.parse(data.results);
 			if(json.length){
-					var add = $('#map_series_dropdown');
-					var select = $('#Maps_by_series');
-					for (var i = 0; i < json.length; i++){
-						for(data in json[i]){
-							console.log(json[i][data]);
-							var option = document.createElement('option');
-							var option2 = document.createElement('option');
-							option.value = json[i][data];
-							option.innerHTML = json[i][data];
-							option2.value = json[i][data];
-							option2.innerHTML = json[i][data];
-							add.append(option);
-							select.append(option2);
-						}
+				var add = $('#Series_dropdown');
+				var select = $('#Char_by_series');
+				var update = $('#updateSeriesDropdown')
+				for (var i = 0; i < json.length; i++){
+					for(data in json[i]){
+						var option = document.createElement('option');
+						var option2 = document.createElement('option');
+						var option3 = document.createElement('option');
+						option.value = json[i][data];
+						option.innerHTML = json[i][data];
+						option2.value = json[i][data];
+						option2.innerHTML = json[i][data];
+						option3.value = json[i][data];
+						option3.innerHTML = json[i][data];
+						add.append(option);
+						select.append(option2);
+						update.append(option3);
 					}
 				}
+			}
 		},
 		error: function(ts){console.log("Error in the Get");},
 	});
@@ -128,14 +132,6 @@ $('#newMap').submit('click',function(event) {
 		});	
 	}
 	event.preventDefault();
-});
-
-$(document).on('click','#cancelUpdateMap',function(){
-	console.log("Changing Windows");
-	$('#updateMap').toggle();
-	$('#newMap').toggle();
-	$('.updateCell').toggle();
-	$('.deleteMap').toggle();
 });
 
 $(document).on('click','.updateMap',function(){
@@ -188,29 +184,6 @@ $('#updateMap').submit('click', function(event){
 		$('.updateCell').toggle();
 		$('.deleteMap').toggle();
 	}
-	event.preventDefault();
-});
-
-$('#update').submit('click', function(event){
-	
-	var id = $('#idUpdate').val();
-	$.ajax({
-		url: '/update?id='+id+'&',
-		method: "get",
-		dataType: "json",
-		data: $("#update").serialize(),
-		success: function(){
-			console.log("Updating Data");
-			loadData('/fill_maps');
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
-
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
-	$('.updateCell').toggle();
-	
 	event.preventDefault();
 });
 
