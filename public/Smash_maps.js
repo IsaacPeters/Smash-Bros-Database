@@ -199,21 +199,6 @@ $(document).on('click','#submitMSButton',function(){
 	
 });
 
-$(document).on('click','.deleteExer',function(){
-	var id = $(this).closest('tr').find('td:eq(0)').text();
-	console.log(id);
-	
-	$.ajax({
-		url : "/delete?id="+id,
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
-	
-});
-
 $(document).on('click','.deleteMap',function(){
 	$('#deleteMap').show();
 	var id = $(this).closest('tr').find('td:eq(0)').text();
