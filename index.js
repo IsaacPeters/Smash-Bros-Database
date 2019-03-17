@@ -40,7 +40,7 @@ app.get('/Characters_to_games',function(req,res){
 
 app.get('/fill_characters',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id ORDER BY C.Year_added_to_Smash ASC', function(err, rows, fields){
+    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id ORDER BY C.Name ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -137,7 +137,7 @@ app.get('/delete_character_relation',function(req,res,next){
 
 app.get('/fill_maps',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT m.Id, m.Name, m.Year_added_to_Smash, os.Name AS Series_Name FROM Smash_Maps m JOIN Original_Series os ON os.Id = m.Series_id', function(err, rows, fields){
+    mysql.pool.query('SELECT m.Id, m.Name, m.Year_added_to_Smash, os.Name AS Series_Name FROM Smash_Maps m JOIN Original_Series os ON os.Id = m.Series_id ORDER BY m.Name ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -235,7 +235,7 @@ app.get('/fill_dropdown_by_map',function(req,res,next){
 
 app.get('/fill_smash',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT Id, Name, Year_released FROM Smash_Games', function(err, rows, fields){
+    mysql.pool.query('SELECT Id, Name, Year_released FROM Smash_Games ORDER BY Year_released ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -325,7 +325,7 @@ app.get('/delete_smash_relation',function(req,res,next){
 
 app.get('/fill_series',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT Id, Name, First_game, Creation_year, Number_of_games FROM Original_Series', function(err, rows, fields){
+    mysql.pool.query('SELECT Id, Name, First_game, Creation_year, Number_of_games FROM Original_Series ORDER BY Id = 0 DESC, Creation_year ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -393,7 +393,7 @@ app.get('/remove_series_relation',function(req,res,next){
 
 app.get('/fill_cg',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT DISTINCT c.Name AS Character_Name, g.Name AS Game_Name FROM Characters c JOIN Characters_to_Games cg ON c.Id = cg.Character_id JOIN Smash_Games g ON g.Id = cg.Game_id', function(err, rows, fields){
+    mysql.pool.query('SELECT DISTINCT c.Name AS Character_Name, g.Name AS Game_Name FROM Characters c JOIN Characters_to_Games cg ON c.Id = cg.Character_id JOIN Smash_Games g ON g.Id = cg.Game_id ORDER BY cg.Character_id ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -431,7 +431,7 @@ app.get('/delete_cg',function(req,res,next){
 
 app.get('/fill_mg',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT DISTINCT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id', function(err, rows, fields){
+    mysql.pool.query('SELECT DISTINCT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id ORDER BY mg.Map_id ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
