@@ -90,7 +90,7 @@ function fillSeries(){
 			var json = JSON.parse(data.results);
 			if(json.length){
 				var add = $('#Series_dropdown');
-				var select = $('#Char_by_series');
+				var select = $('#Maps_by_series');
 				var update = $('#updateSeriesDropdown')
 				for (var i = 0; i < json.length; i++){
 					for(data in json[i]){
