@@ -393,7 +393,7 @@ app.get('/remove_series_relation',function(req,res,next){
 
 app.get('/fill_cg',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT c.Name AS Character_Name, g.Name AS Game_Name FROM Characters c JOIN Characters_to_Games cg ON c.Id = cg.Character_id JOIN Smash_Games g ON g.Id = cg.Game_id', function(err, rows, fields){
+    mysql.pool.query('SELECT DISTINCT c.Name AS Character_Name, g.Name AS Game_Name FROM Characters c JOIN Characters_to_Games cg ON c.Id = cg.Character_id JOIN Smash_Games g ON g.Id = cg.Game_id', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -431,7 +431,7 @@ app.get('/delete_cg',function(req,res,next){
 
 app.get('/fill_mg',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id', function(err, rows, fields){
+    mysql.pool.query('SELECT DISTINCT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
