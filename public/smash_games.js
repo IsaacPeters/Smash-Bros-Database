@@ -216,18 +216,16 @@ $('#updateSmash').submit('click', function(event){
 	var id = $('#idUpdateSmash').val();
 	console.log(id);
 	$.ajax({
-		url: '/update_smash?id='+id+'&',
+		url: '/update_smash?id='+id,
 		method: "get",
 		dataType: "json",
 		data: $("#updateSmash").serialize(),
 		success: function(){
 			console.log("Updating Data");
+			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
-
-	//Error Work Around
-	window.location.href = 'Smash_Games';
 
 	$('#updateSmash').toggle();
 	$('#newSmash').toggle();
