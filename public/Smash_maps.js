@@ -166,18 +166,16 @@ $('#updateMap').submit('click', function(event){
 		var id = $('#idUpdateMap').val();
 		console.log(id);
 		$.ajax({
-			url: '/update_map?id='+id+'&',
+			url: '/update_map?id='+id,
 			method: "get",
 			dataType: "json",
 			data: $("#updateMap").serialize(),
 			success: function(){
+				loadData('/fill_maps')
 				console.log("Updating Data");
 			},
-			error: function(ts){console.log(ts.responseText);},
+			error: function(ts){console.log(ts);},
 		});
-
-		//Error Work Around
-		window.location.href = 'Smash_maps';
 
 		$('#updateMap').toggle();
 		$('#newMap').toggle();
