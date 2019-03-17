@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6875);
+app.set('port', 3141);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -89,26 +89,25 @@ app.get('/fill_dropdown_by_character',function(req,res,next){
     });
 });
 
-app.get('/update_character',function(req,res,next){
+app.get('/update_character', function(req,res,next){
     var context = {};
-    mysql.pool.query("SELECT * FROM Characters WHERE id=?", [req.query.id], function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-        if(result.length == 1){
-            var curVals = result[0];
-            mysql.pool.query("UPDATE Characters c SET c.Name=?, c.Species=?, c.Year_Released=?, c.Year_added_to_Smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
-            [req.query.name || curVals.name, req.query.species || curVals.species, req.query.year_released || curVals.year_released, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown , req.query.id],
-            function(err, result){
+    mysql.pool.query("SELECT * FROM Characters WHERE id=?", [req.query.id], function(err,result) {
+    if(err) {
+        console.log(err);
+        return;
+    }
+    if(result.length == 1){
+        mysql.pool.query("UPDATE Characters c SET c.Name=?, c.Species=?, c.Year_Released=?, c.Year_added_to_Smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
+        [req.query.name || curVals.name, req.query.species || curVals.species, req.query.year_released || curVals.year_released, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown , req.query.id],
+        function(err, result){
             if(err){
                 next(err);
                 return;
             }
-            context.results = "Updated " + result.changedRows + " rows.";
-            res.render('home',context);
-            });
-        }
+            context.results = JSON.stringify(result);
+            res.send(context);
+        });
+    }
     });
 });
 
@@ -165,7 +164,7 @@ app.get('/filter_maps',function(req,res,next){
 app.get('/insert_map',function(req,res,next){
     var context = {};
 	mysql.pool.query('INSERT INTO Smash_Maps (`Name`, `Year_added_to_Smash`, `Series_id`) VALUES (?, ?,(SELECT Id FROM Original_Series WHERE Name = ?))', 
-	[req.query.map_name, req.query.map_smash_year, req.query.map_series_dropdown], function(err, result){
+	[req.query.name, req.query.smash_year, req.query.Series_dropdown], function(err, result){
 		if(err){
 			next(err);
 			return;
@@ -174,26 +173,25 @@ app.get('/insert_map',function(req,res,next){
 	});
 });
 
-app.get('/update_map',function(req,res,next){
+app.get('/update_map', function(req,res,next){
     var context = {};
-    mysql.pool.query("SELECT * FROM Smash_maps WHERE id=?", [req.query.id], function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-        if(result.length == 1){
-            var curVals = result[0];
-            mysql.pool.query("UPDATE Smash_maps c SET c.Name=?, c.Year_added_to_smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
-            [req.query.map_name || curVals.map_name, req.query.map_smash_year || curVals.map_smash_year, req.query.map_series_dropdown  || curVals.map_series_dropdown, req.query.id],
-            function(err, result){
+    mysql.pool.query('SELECT * FROM Smash_Maps WHERE id = ' + req.query.id, function(err,rows,fields) {
+    if(err) {
+        console.log(err);
+        return;
+    }
+    if(rows.length == 1){
+        mysql.pool.query("UPDATE Smash_Maps c SET c.Name=?, c.Year_added_to_smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
+        [req.query.name || curVals.name, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown  || curVals.Series_dropdown, req.query.id],
+        function(err, result){
             if(err){
                 next(err);
                 return;
             }
-            context.results = "Updated " + result.changedRows + " rows.";
-            res.render('home',context);
-            });
-        }
+            context.results = JSON.stringify(rows);
+            res.send(context);
+        });
+    }
     });
 });
 

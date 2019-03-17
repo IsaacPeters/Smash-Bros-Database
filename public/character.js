@@ -187,13 +187,11 @@ $('#updateCharacter').submit('click', function(event){
 			dataType: "json",
 			data: $("#updateCharacter").serialize(),
 			success: function(){
+				loadData('/fill_characters')
 				console.log("Updating Data");
 			},
 			error: function(ts){console.log(ts.responseText);},
 		});
-
-		//Error Work Around
-		window.location.href = 'Characters';
 
 		$('#updateCharacter').toggle();
 		$('#newCharacter').toggle();
