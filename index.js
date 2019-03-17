@@ -288,6 +288,29 @@ app.get('/insert_smash',function(req,res,next){
 	});
 });
 
+app.get('/update_smash',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT * FROM Smash_Games WHERE id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        if(result.length == 1){
+            var curVals = result[0];
+            mysql.pool.query("UPDATE Smash_Games c SET c.Name=?, c.Year_Released=? WHERE id=? ",
+            [req.query.name || curVals.name, req.query.year_released || curVals.year_released, req.query.id],
+            function(err, result){
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = "Updated " + result.changedRows + " rows.";
+            res.render('home',context);
+            });
+        }
+    });
+});
+
 app.get('/fill_dropdown_by_smash',function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT Name FROM Smash_Games', function(err, rows, fields){

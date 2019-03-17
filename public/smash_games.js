@@ -67,7 +67,7 @@ function loadData(){
 					var edit = document.createElement('button');
 					var newCell = document.createElement('td');
 					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
+					$(edit).addClass('updateSmash');
 					$(edit).text('Edit');
 					newCell.append(edit);
 					newRow.append(newCell);
@@ -169,48 +169,70 @@ function loadSearch(x){
 	});
 }
 
-$(document).on('click','.updateExer',function(){
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
-	$('.updateCell').toggle();
-	
-	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
-	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
-	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
-	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
-	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
-	
-	var unit = $(this).closest('tr').find('td:eq(5)').text();
-	if(unit == "Pounds"){
-		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
+$('#newSmash').submit('click',function(event) {
+	if($('#Series_dropdown').val() == "no_series"){
+		window.location.href = 'Original_series';
 	}
 	else{
-		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
+		$.ajax({
+			url : "/insert_Smash",
+			method: "get",
+			dataType: "json",
+			data: $("#newSmash").serialize(),
+			success: function(){
+				console.log("Loading Data after insert");
+				loadData('/fill_smash');
+			},
+			error: function(ts){console.log(ts.responseText);},
+		});	
 	}
+	event.preventDefault();
 });
 
+$(document).on('click','.updateSmash',function(){
+	console.log("Changing Windows");
+	$('#updateSmash').toggle();
+	$('#newSmash').toggle();
+	$('.updateCell').toggle();
+	$('.deleteSmash').toggle();
 
-$('#update').submit('click', function(event){
+	console.log($(this).closest('tr').find('td:eq(3)').text());
+
+	$('#idUpdateSmash').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#smashNameUpdate').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#smashReleaseUpdate').val($(this).closest('tr').find('td:eq(2)').text());
 	
-	var id = $('#idUpdate').val();
+});
+
+$(document).on('click','#cancelUpdateSmash',function(){
+	console.log("Changing Windows");
+	$('#updateSmash').toggle();
+	$('#newSmash').toggle();
+	$('.updateCell').toggle();
+	$('.deleteSmash').toggle();
+});
+
+$('#updateSmash').submit('click', function(event){
+	var id = $('#idUpdateSmash').val();
+	console.log(id);
 	$.ajax({
-		url: '/update?id='+id+'&',
+		url: '/update_smash?id='+id+'&',
 		method: "get",
 		dataType: "json",
-		data: $("#update").serialize(),
+		data: $("#updateSmash").serialize(),
 		success: function(){
 			console.log("Updating Data");
-			loadData();
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
 
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+	//Error Work Around
+	window.location.href = 'Smash_Games';
+
+	$('#updateSmash').toggle();
+	$('#newSmash').toggle();
 	$('.updateCell').toggle();
-	
+	$('.deleteSmash').toggle();
 	event.preventDefault();
 });
 

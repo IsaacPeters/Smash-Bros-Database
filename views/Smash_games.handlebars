@@ -1,5 +1,5 @@
 {{> navigation}}
-<form id = newSmash>
+<form id = "newSmash">
     <fieldset>
         <legend>Add a Smash Game</legend>
         <label for="name">Name</label>
@@ -9,6 +9,20 @@
         <input type="number" name="smash_year_released" id="smash_year_released" required>
         <br>
         <input type="submit" id="submitButton" value="Add Game">
+    </fieldset>
+</form>
+<form class = "updates" id = "updateSmash">
+    <fieldset>
+        <legend>Update a Smash Game</legend>
+        <input type="number" class = "idUpdate" id ="idUpdateSmash">
+        <label for="name">Name</label>
+        <input type="text" name="smash_name" id="smashNameUpdate" required>
+        <br>
+        <label for="Year_released">Year Released</label>
+        <input type="number" name="smash_year_released" id="smashReleaseUpdate" required>
+        <br>
+        <input type="submit" id="updateSmash" value="Update Game">
+        <input type="button" id="cancelUpdateSmash" value="Cancel Update">
     </fieldset>
 </form>
 </br>
