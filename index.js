@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 3141);
+app.set('port', 6875);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -176,22 +176,22 @@ app.get('/insert_map',function(req,res,next){
 app.get('/update_map', function(req,res,next){
     var context = {};
     mysql.pool.query('SELECT * FROM Smash_Maps WHERE id = ' + req.query.id, function(err,rows,fields) {
-    if(err) {
-        console.log(err);
-        return;
-    }
-    if(rows.length == 1){
-        mysql.pool.query("UPDATE Smash_Maps c SET c.Name=?, c.Year_added_to_smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
-        [req.query.name || curVals.name, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown  || curVals.Series_dropdown, req.query.id],
-        function(err, result){
-            if(err){
-                next(err);
-                return;
-            }
-            context.results = JSON.stringify(rows);
-            res.send(context);
-        });
-    }
+        if(err) {
+            console.log(err);
+            return;
+        }
+        if(rows.length == 1){
+            mysql.pool.query("UPDATE Smash_Maps c SET c.Name=?, c.Year_added_to_smash=?, Series_id=(SELECT Id FROM Original_Series WHERE Name = ?) WHERE id=? ",
+            [req.query.name || curVals.name, req.query.smash_year || curVals.smash_year, req.query.Series_dropdown  || curVals.Series_dropdown, req.query.id],
+            function(err, result){
+                if(err){
+                    next(err);
+                    return;
+                }
+                context.results = JSON.stringify(rows);
+                res.send(context);
+            });
+        }
     });
 });
 
@@ -284,6 +284,29 @@ app.get('/insert_smash',function(req,res,next){
 		}
 		res.send(context);
 	});
+});
+
+app.get('/update_smash',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT * FROM Smash_Games WHERE id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        if(result.length == 1){
+            var curVals = result[0];
+            mysql.pool.query("UPDATE Smash_Games c SET c.Name=?, c.Year_Released=? WHERE id=? ",
+            [req.query.smash_name || curVals.smash_name, req.query.smash_year_released || curVals.smash_year_released, req.query.id],
+            function(err, result){
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = JSON.stringify(result);
+            res.send(context);
+            });
+        }
+    });
 });
 
 app.get('/fill_dropdown_by_smash',function(req,res,next){
