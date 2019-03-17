@@ -47,11 +47,6 @@ function loadData(x){
 					for(data in json[i]){
 						var newCell = document.createElement('td');
 						newCell.append(json[i][data]);
-						if(data == "date"){
-							var date = $(newCell).text();
-							date = date.substring(0, (date.indexOf('T')));
-							$(newCell).text(date);
-						}
 						if(data == "Id"){
 							$(newCell).addClass('hiddenCol');
 						}
@@ -180,7 +175,6 @@ $('#updateCharacter').submit('click', function(event){
 	}
 	else{
 		var id = $('#idUpdateCharacter').val();
-		console.log(id);
 		$.ajax({
 			url: '/update_character?id='+id+'&',
 			method: "get",
