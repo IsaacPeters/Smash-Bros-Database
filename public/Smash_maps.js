@@ -90,7 +90,7 @@ function fillSeries(){
 			var json = JSON.parse(data.results);
 			if(json.length){
 				var add = $('#Series_dropdown');
-				var select = $('#Char_by_series');
+				var select = $('#Maps_by_series');
 				var update = $('#updateSeriesDropdown')
 				for (var i = 0; i < json.length; i++){
 					for(data in json[i]){
@@ -196,21 +196,6 @@ $(document).on('click','#submitMSButton',function(){
 	}
 	
 	loadData(url_string);
-	
-});
-
-$(document).on('click','.deleteExer',function(){
-	var id = $(this).closest('tr').find('td:eq(0)').text();
-	console.log(id);
-	
-	$.ajax({
-		url : "/delete?id="+id,
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
 	
 });
 
