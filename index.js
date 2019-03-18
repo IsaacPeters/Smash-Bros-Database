@@ -453,7 +453,7 @@ app.get('/delete_cg',function(req,res,next){
 
 app.get('/update_cg',function(req,res,next){
     var context = {};
-    mysql.pool.query('UPDATE Characters_to_Games SET Character_id = (SELECT Id FROM Characters WHERE Name = "Ness"), Game_id = (SELECT Id FROM Smash_Games WHERE Name = "Test Smash") WHERE Character_id = ? AND Game_id = ?', 
+    mysql.pool.query('UPDATE Characters_to_Games SET Character_id = (SELECT Id FROM Characters WHERE Name = ?), Game_id = (SELECT Id FROM Smash_Games WHERE Name = ?) WHERE Character_id = ? AND Game_id = ?', 
     [req.query.smash_characters_dropdown, req.query.smash_games_dropdown, req.query.Character_id, req.query.Game_id], function(err, result){
         if(err){
             next(err);
@@ -466,7 +466,7 @@ app.get('/update_cg',function(req,res,next){
 
 app.get('/fill_mg',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT DISTINCT m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id ORDER BY mg.Map_id ASC', function(err, rows, fields){
+    mysql.pool.query('SELECT DISTINCT mg.Map_id, mg.Game_id, m.Name AS Map_Name, g.Name AS Game_Name FROM Smash_Maps m JOIN Maps_to_Games mg ON m.Id = mg.Map_id JOIN Smash_Games g ON g.Id = mg.Game_id ORDER BY mg.Map_id ASC', function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -487,6 +487,22 @@ app.get('/insert_mg',function(req,res,next){
 		}
 		res.send(context);
 	});
+});
+
+app.get('/update_mg',function(req,res,next){
+    var context = {};
+    mysql.pool.query('UPDATE Maps_to_Games SET Map_id = (SELECT Id FROM Smash_Maps WHERE Name = ?), Game_id = (SELECT Id FROM Smash_Games WHERE Name = ?) WHERE Map_id = ? AND Game_id = ?', 
+    [req.query.smash_maps_dropdown, req.query.smash_games_dropdown, req.query.Map_id, req.query.Game_id], function(err, result){
+        console.log(req.query.smash_maps_dropdown);
+        console.log(req.query.smash_games_dropdown);
+        console.log(req.query.Game_id);
+        console.log(req.query.Map_id);
+        if(err){
+            next(err);
+            return;
+        }
+        res.send(context);
+    });
 });
 
 app.get('/delete_mg',function(req,res,next){
