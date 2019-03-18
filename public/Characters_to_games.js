@@ -177,10 +177,8 @@ $('#updateCGRelationship').submit('click', function(event){
 	console.log(Character_id);
 	console.log(Game_id);
 
-	console.log($("#updateCGRelationship").serialize());
-
 	$.ajax({
-		url: '/update_cg?Character_id='+Character_id+'&Game_id'+Game_id+'&',
+		url: '/update_cg?Character_id='+Character_id+'&Game_id='+Game_id+'&',
 		method: "get",
 		dataType: "json",
 		data: $("#updateCGRelationship").serialize(),
