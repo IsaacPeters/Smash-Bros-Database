@@ -15,6 +15,26 @@
         <br><br>
         <input type="submit" id="newMGRelationship" value="Add Relationship">
     </fieldset>
+</form>
+<form class = "updates" id="updateMGRelationship">
+    <fieldset>
+        <legend>Update the Map</legend>
+        <input type="number" class = "idUpdate" id ="idUpdateMGMap">
+        <input type="number" class = "idUpdate" id ="idUpdateMGGame">
+		<label for="Character">Choose which map you want to assign a game: </label>
+		<select name="smash_maps_dropdown" id="smash_maps_dropdown_update">
+			<option value="no_series">No Character</option>
+		</select>
+        <br>
+		<label for="Smash_game">Choose which game you want to assign it to: </label>
+		<select name="smash_games_dropdown" id="smash_games_dropdown_update">
+			<option value="no_series">No Game</option>
+		</select>
+        <br><br>
+        <input type="submit" id="updateMG" value="Update Relationship">
+        <input type="button" id="cancelUpdateMG" value="Cancel Update">
+    </fieldset>
+</form>
 <table id="dataDisplay"> </table>
 
 <script src="./jquery-3.3.1.js"></script>
