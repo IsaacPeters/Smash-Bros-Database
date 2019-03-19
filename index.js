@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 6875);
+app.set('port', 3141);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -248,7 +248,7 @@ app.get('/fill_smash',function(req,res,next){
 
 app.get('/search_games_characters',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT c.Name FROM Characters c JOIN Characters_to_Games cg ON cg.Character_id = c.Id JOIN Smash_Games g ON g.Id = cg.Game_id WHERE g.Name = ?  ',
+    mysql.pool.query('SELECT DISTINCT c.Name FROM Characters c JOIN Characters_to_Games cg ON cg.Character_id = c.Id JOIN Smash_Games g ON g.Id = cg.Game_id WHERE g.Name = ?  ',
 	[req.query.game_name], function(err, rows, fields){
         if(err){
             console.log("ran into an error");
@@ -262,7 +262,7 @@ app.get('/search_games_characters',function(req,res,next){
 
 app.get('/search_games_maps',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT m.Name FROM Smash_Maps m JOIN Maps_to_Games mg ON mg.Map_id = m.Id JOIN Smash_Games g ON g.Id = mg.Game_id WHERE g.Name = ?  ',
+    mysql.pool.query('SELECT DISTINCT m.Name FROM Smash_Maps m JOIN Maps_to_Games mg ON mg.Map_id = m.Id JOIN Smash_Games g ON g.Id = mg.Game_id WHERE g.Name = ?  ',
 	[req.query.game_name], function(err, rows, fields){
         if(err){
             console.log("ran into an error");
