@@ -53,7 +53,7 @@ app.get('/fill_characters',function(req,res,next){
 
 app.get('/filter_characters',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id WHERE OS.Name = ?', [req.query.Series_Name], function(err, rows, fields){
+    mysql.pool.query('SELECT C.Id, C.Name, C.Species, C.Year_released, C.Year_added_to_Smash, OS.Name AS Series_Name FROM Characters C JOIN Original_Series OS ON OS.Id = C.Series_id WHERE OS.Name = ? ORDER BY C.Name ASC', [req.query.Series_Name], function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
@@ -150,7 +150,7 @@ app.get('/fill_maps',function(req,res,next){
 
 app.get('/filter_maps',function(req,res,next){
     var context = {};
-    mysql.pool.query('SELECT m.Id, m.Name, m.Year_added_to_Smash, os.Name AS Series_Name FROM Smash_Maps m JOIN Original_Series os ON os.Id = m.Series_id WHERE os.Name = ?', [req.query.Series_Name], function(err, rows, fields){
+    mysql.pool.query('SELECT m.Id, m.Name, m.Year_added_to_Smash, os.Name AS Series_Name FROM Smash_Maps m JOIN Original_Series os ON os.Id = m.Series_id WHERE os.Name = ? ORDER BY m.Name ASC', [req.query.Series_Name], function(err, rows, fields){
         if(err){
             console.log("ran into an error");
             next(err);
