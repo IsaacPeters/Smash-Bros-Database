@@ -63,7 +63,7 @@ function loadData(){
 						var edit = document.createElement('button');
 						var newCell = document.createElement('td');
 						$(newCell).addClass('updateCell');
-						$(edit).addClass('updateExer');
+						$(edit).addClass('updateSeries');
 						$(edit).text('Edit');
 						newCell.append(edit);
 						newRow.append(newCell);
@@ -95,36 +95,39 @@ $('#newSeries').submit('click',function(event) {
 	event.preventDefault();
 });
 
-$(document).on('click','.updateExer',function(){
+$(document).on('click','.updateSeries',function(){
 	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+	$('#updateSeries').toggle();
+	$('#newSeries').toggle();
 	$('.updateCell').toggle();
+	$('.deleteSeries').toggle();
+
+	console.log($(this).closest('tr').find('td:eq(5)').text());
+
+	$('#idUpdateSeries').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#seriesNameUpdate').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#seriesGameUpdate').val($(this).closest('tr').find('td:eq(2)').text());
+	$('#seriesYearUpdate').val($(this).closest('tr').find('td:eq(3)').text());
+	$('#seriesNumGamesUpdate').val($(this).closest('tr').find('td:eq(4)').text());
 	
-	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
-	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
-	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
-	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
-	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
-	
-	var unit = $(this).closest('tr').find('td:eq(5)').text();
-	if(unit == "Pounds"){
-		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
-	}
-	else{
-		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
-	}
 });
 
+$(document).on('click','#cancelUpdateSeries',function(){
+	console.log("Changing Windows");
+	$('#updateSeries').toggle();
+	$('#newSeries').toggle();
+	$('.updateCell').toggle();
+	$('.deleteSeries').toggle();
+});
 
-$('#update').submit('click', function(event){
-	
-	var id = $('#idUpdate').val();
+$('#updateSeries').submit('click', function(event){
+	var id = $('#idUpdateSeries').val();
+	console.log(id);
 	$.ajax({
-		url: '/update?id='+id+'&',
+		url: '/update_series?id='+id,
 		method: "get",
 		dataType: "json",
-		data: $("#update").serialize(),
+		data: $("#updateSeries").serialize(),
 		success: function(){
 			console.log("Updating Data");
 			loadData();
@@ -132,11 +135,10 @@ $('#update').submit('click', function(event){
 		error: function(ts){console.log(ts.responseText);},
 	});
 
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+	$('#updateSeries').toggle();
+	$('#newSeries').toggle();
 	$('.updateCell').toggle();
-	
+	$('.deleteSeries').toggle();
 	event.preventDefault();
 });
 

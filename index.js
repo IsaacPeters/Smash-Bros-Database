@@ -383,6 +383,31 @@ app.get('/fill_dropdown_by_series',function(req,res,next){
     });
 });
 
+app.get('/update_series',function(req,res,next){
+    var context = {};
+    mysql.pool.query("SELECT * FROM Original_Series WHERE id=?", [req.query.id], function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+        if(result.length == 1){
+            var curVals = result[0];
+            console.log("UPDATE Original_Series c SET c.Name=?, c.First_game=?, c.Creation_year=?, c.Number_of_games WHERE id=? ",
+            [req.query.series_name || curVals.series_name, req.query.series_first_game || curVals.series_first_game, req.query.series_creation_year  || curVals.series_creation_year, req.query.series_number_of_games  || curVals.series_number_of_games, req.query.id]);
+            mysql.pool.query("UPDATE Original_Series c SET c.Name=?, c.First_game=?, c.Creation_year=?, c.Number_of_games WHERE id=? ",
+            [req.query.series_name || curVals.series_name, req.query.series_first_game || curVals.series_first_game, req.query.series_creation_year  || curVals.series_creation_year, req.query.series_number_of_games  || curVals.series_number_of_games, req.query.id],
+            function(err, result){
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = JSON.stringify(result);
+            res.send(context);
+            });
+        }
+    });
+});
+
 app.get('/delete_series',function(req,res,next){
     var context = {};
     mysql.pool.query("DELETE FROM Original_Series WHERE Id=?", [req.query.id], function(err, result){

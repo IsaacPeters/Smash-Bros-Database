@@ -1,5 +1,5 @@
 {{> navigation}}
-<form id = newSeries>
+<form id = "newSeries">
     <fieldset>
         <legend>Add Original Series</legend>
         <label for="Name">Name</label>
@@ -15,6 +15,26 @@
         <input type="number" name="series_number_of_games" id="series_number_of_games" required>
         <br><br>
         <input type="submit" id="submitButton" value="Add Original Series">
+    </fieldset>
+</form>
+<form class = "updates" id = "updateSeries">
+    <fieldset>
+        <legend>Update an Original Series</legend>
+        <input type="number" class = "idUpdate" id ="idUpdateSeries">
+        <label for="name">Name</label>
+        <input type="text" name="series_name" id="seriesNameUpdate" required>
+        <br>
+        <label for="First_game">First Game</label>
+        <input type="text" name="series_first_game" id="seriesGameUpdate" required>
+        <br>
+        <label for="Creation_year">Creation Year</label>
+        <input type="number" name="series_creation_year" id="seriesYearUpdate" required>
+        <br>
+        <label for="Number_of_games">Number of Games</label>
+        <input type="number" name="series_number_of_games" id="seriesNumGamesUpdate" required>
+        <br><br>
+        <input type="submit" id="updateSeries" value="Update Series">
+        <input type="button" id="cancelUpdateSeries" value="Cancel Update">
     </fieldset>
 </form>
 </r>
