@@ -28,7 +28,7 @@ SELECT c.Name FROM Characters c JOIN Characters_to_Games cg ON cg.Character_id =
 --get all maps from a particular game
 SELECT m.Name FROM Smash_Maps m JOIN Maps_to_Games mg ON mg.Map_id = m.Id JOIN Smash_Games g ON g.Id = mg.Game_id WHERE g.Name = :smash_game;
 
--- get all values from Original_Series table ordered by the year of the series debut
+-- get all values from Original_Series table ordered by the year of the series debut (After the Smash Series Id 0 is put at the top)
 SELECT SELECT Id, Name, First_game, Creation_year, Number_of_games FROM Original_Series ORDER BY Id = 0 DESC, Creation_year ASC;
 
 --get all original series names
