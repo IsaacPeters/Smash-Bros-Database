@@ -51,21 +51,22 @@ function loadData(){
 						}
 						newRow.append(newCell);
 					}
-
-					var deleteBtn = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(deleteBtn).addClass("deleteSeries");
-					$(deleteBtn).text('Delete');
-					newCell.append(deleteBtn);
-					newRow.append(newCell);
-					
-					var edit = document.createElement('button');
-					var newCell = document.createElement('td');
-					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateSeries');
-					$(edit).text('Edit');
-					newCell.append(edit);
-					newRow.append(newCell);
+					if(i != 0){
+						var deleteBtn = document.createElement('button');
+						var newCell = document.createElement('td');
+						$(deleteBtn).addClass("deleteSeries");
+						$(deleteBtn).text('Delete');
+						newCell.append(deleteBtn);
+						newRow.append(newCell);
+						
+						var edit = document.createElement('button');
+						var newCell = document.createElement('td');
+						$(newCell).addClass('updateCell');
+						$(edit).addClass('updateSeries');
+						$(edit).text('Edit');
+						newCell.append(edit);
+						newRow.append(newCell);
+					}
 					
 					tablebody.append(newRow);
 				}
