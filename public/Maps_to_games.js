@@ -158,7 +158,6 @@ $(document).on('click','.updateMG',function(){
 	$('#idUpdateMGMap').val($(this).closest('tr').find('td:eq(0)').text());
 	$('#idUpdateMGGame').val($(this).closest('tr').find('td:eq(1)').text());
 	$('#smash_maps_dropdown_update').val($(this).closest('tr').find('td:eq(2)').text());
-	console.log($(this).closest('tr').find('td:eq(2)').text());
 	$('#smash_games_dropdown_update').val($(this).closest('tr').find('td:eq(3)').text());
 	
 });
@@ -173,9 +172,6 @@ $(document).on('click','#cancelUpdateMG',function(){
 $('#updateMGRelationship').submit('click', function(event){
 	var Map_id = $('#idUpdateMGMap').val();
 	var Game_id = $('#idUpdateMGGame').val();
-
-	console.log(Map_id);
-	console.log(Game_id);
 
 	$.ajax({
 		url: '/update_mg?Map_id='+Map_id+'&Game_id='+Game_id+'&',
@@ -197,11 +193,8 @@ $('#updateMGRelationship').submit('click', function(event){
 	event.preventDefault();
 });
 $(document).on('click','.deleteMG',function(){
-	var Map_id = $(this).closest('tr').find('td:eq(0)').text();
-	var Game_id = $(this).closest('tr').find('td:eq(1)').text();
-
-	console.log(Map_id);
-	console.log(Game_id);
+	var Map_id = $(this).closest('tr').find('td:eq(2)').text();
+	var Game_id = $(this).closest('tr').find('td:eq(3)').text();
 
 	$.ajax({
 		url : "/delete_mg?Map_id="+Map_id+"&Game_id="+Game_id,
