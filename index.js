@@ -7,7 +7,7 @@ var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 3141);
+app.set('port', 6875);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/',function(req,res){
@@ -392,9 +392,7 @@ app.get('/update_series',function(req,res,next){
         }
         if(result.length == 1){
             var curVals = result[0];
-            console.log("UPDATE Original_Series c SET c.Name=?, c.First_game=?, c.Creation_year=?, c.Number_of_games WHERE id=? ",
-            [req.query.series_name || curVals.series_name, req.query.series_first_game || curVals.series_first_game, req.query.series_creation_year  || curVals.series_creation_year, req.query.series_number_of_games  || curVals.series_number_of_games, req.query.id]);
-            mysql.pool.query("UPDATE Original_Series c SET c.Name=?, c.First_game=?, c.Creation_year=?, c.Number_of_games WHERE id=? ",
+            mysql.pool.query("UPDATE Original_Series c SET c.Name=?, c.First_game=?, c.Creation_year=?, c.Number_of_games=? WHERE id=? ",
             [req.query.series_name || curVals.series_name, req.query.series_first_game || curVals.series_first_game, req.query.series_creation_year  || curVals.series_creation_year, req.query.series_number_of_games  || curVals.series_number_of_games, req.query.id],
             function(err, result){
             if(err){

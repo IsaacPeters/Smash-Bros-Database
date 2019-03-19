@@ -106,22 +106,6 @@ function fillGames(){
 	});
 }
 
-$('#newSmash').submit('click',function(event) {
-	$.ajax({
-		url : "/insert_smash",
-		method: "get",
-		dataType: "json",
-		data: $("#newSmash").serialize(),
-		success: function(){
-			console.log("Loading Data after insert");
-			loadData();
-		},
-		error: function(ts){console.log(ts.responseText);},
-	});
-
-	event.preventDefault();
-});
-
 $(document).on('click','#submitGCMButton',function(){
 	var desired = $('#check_smash_contents option:selected').text();
 	var game = $('#smash_games_select option:selected').text();
