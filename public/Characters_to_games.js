@@ -1,12 +1,15 @@
 $("document").ready(function(){
 	var tablehead = document.createElement('thead');
-	var headers = ["Character", "Smash Game"];
+	var headers = ["Character_id", "Game_id","Character", "Smash Game"];
 	var header = document.createElement('tr');
 	
 	for (i in headers){
 		var headerCell = document.createElement('th');
 		headerCell.append(headers[i]);
-		if(i == 3){
+		if(i == 0 || i == 1){
+			$(headerCell).addClass('hiddenCol');
+		}
+		if(i == 5){
 			$(headerCell).addClass('updateCell');
 		}
 		header.append(headerCell);
@@ -44,6 +47,9 @@ function loadData(){
 					for(data in json[i]){
 						var newCell = document.createElement('td');
 						newCell.append(json[i][data]);
+						if(data == "Character_id" || data == "Game_id"){
+							$(newCell).addClass('hiddenCol');
+						}
 						newRow.append(newCell);
 					}
 					var deleteBtn = document.createElement('button');
@@ -56,7 +62,7 @@ function loadData(){
 					var edit = document.createElement('button');
 					var newCell = document.createElement('td');
 					$(newCell).addClass('updateCell');
-					$(edit).addClass('updateExer');
+					$(edit).addClass('updateCG');
 					$(edit).text('Edit');
 					newCell.append(edit);
 					newRow.append(newCell);
@@ -79,12 +85,17 @@ function fillDropdowns(){
 		var json = JSON.parse(data.results);
 		if(json.length){
 				var select = $('#smash_games_dropdown');
+				var update = $('#smash_games_dropdown_update');
 				for (var i = 0; i < json.length; i++){
 					for(data in json[i]){
 						var option = document.createElement('option');
+						var option2 = document.createElement('option');
 						option.value = json[i][data];
 						option.innerHTML = json[i][data];
 						select.append(option);
+						option2.value = json[i][data];
+						option2.innerHTML = json[i][data];
+						update.append(option2);
 					}
 				}
 			}
@@ -100,12 +111,17 @@ function fillDropdowns(){
 		var json = JSON.parse(data.results);
 		if(json.length){
 				var select = $('#smash_characters_dropdown');
+				var update = $('#smash_characters_dropdown_update');
 				for (var i = 0; i < json.length; i++){
 					for(data in json[i]){
 						var option = document.createElement('option');
+						var option2 = document.createElement('option');
 						option.value = json[i][data];
 						option.innerHTML = json[i][data];
 						select.append(option);
+						option2.value = json[i][data];
+						option2.innerHTML = json[i][data];
+						update.append(option2);
 					}
 				}
 			}
@@ -134,57 +150,56 @@ $('#newCGRelationship').submit('click',function(event) {
 	event.preventDefault();
 });
 
-$(document).on('click','.updateExer',function(){
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+$(document).on('click','.updateCG',function(){
+	$('#updateCGRelationship').toggle();
+	$('#newCGRelationship').toggle();
 	$('.updateCell').toggle();
+	$('.deleteCG').toggle();
+
+	$('#idUpdateCGChar').val($(this).closest('tr').find('td:eq(0)').text());
+	$('#idUpdateCGGame').val($(this).closest('tr').find('td:eq(1)').text());
+	$('#smash_characters_dropdown_update').val($(this).closest('tr').find('td:eq(2)').text());
+	$('#smash_games_dropdown_update').val($(this).closest('tr').find('td:eq(3)').text());
 	
-	$('#idUpdate').val($(this).closest('tr').find('td:eq(0)').text());
-	$('#exerInputup').val($(this).closest('tr').find('td:eq(2)').text());
-	$('#dateInputup').val($(this).closest('tr').find('td:eq(1)').text());
-	$('#repsInputup').val($(this).closest('tr').find('td:eq(3)').text());
-	$('#weightInputup').val($(this).closest('tr').find('td:eq(4)').text());
-	
-	var unit = $(this).closest('tr').find('td:eq(5)').text();
-	if(unit == "Pounds"){
-		$('input:radio[id="unitInputup"][value="Pounds"]').prop('checked', true);		
-	}
-	else{
-		$('input:radio[id="unitInputup"][value="Kilograms"]').prop('checked', true);
-	}
 });
 
+$(document).on('click','#cancelUpdateCG',function(){
+	$('#updateCGRelationship').toggle();
+	$('#newCGRelationship').toggle();
+	$('.updateCell').toggle();
+	$('.deleteCG').toggle();
+});
 
-$('#update').submit('click', function(event){
-	
-	var id = $('#idUpdate').val();
+$('#updateCGRelationship').submit('click', function(event){
+	var Character_id = $('#idUpdateCGChar').val();
+	var Game_id = $('#idUpdateCGGame').val();
+
+	console.log(Character_id);
+	console.log(Game_id);
+
 	$.ajax({
-		url: '/update?id='+id+'&',
+		url: '/update_cg?Character_id='+Character_id+'&Game_id='+Game_id+'&',
 		method: "get",
 		dataType: "json",
-		data: $("#update").serialize(),
+		data: $("#updateCGRelationship").serialize(),
 		success: function(){
-			console.log("Updating Data");
 			loadData();
+			console.log("Updating Data");
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
 
-	console.log("Changing Windows");
-	$('#update').toggle();
-	$('#insert').toggle();
+	$('#updateCGRelationship').toggle();
+	$('#newCGRelationship').toggle();
 	$('.updateCell').toggle();
-	
+	$('.deleteCG').toggle();
+
 	event.preventDefault();
 });
 
 $(document).on('click','.deleteCG',function(){
-	var Character_id = $(this).closest('tr').find('td:eq(0)').text();
-	var Game_id = $(this).closest('tr').find('td:eq(1)').text();
-
-	console.log(Character_id);
-	console.log(Game_id);
+	var Character_id = $(this).closest('tr').find('td:eq(2)').text();
+	var Game_id = $(this).closest('tr').find('td:eq(3)').text();
 	
 	$.ajax({
 		url : "/delete_cg?Character_id="+Character_id+"&Game_id="+Game_id,
@@ -194,4 +209,6 @@ $(document).on('click','.deleteCG',function(){
 		},
 		error: function(ts){console.log(ts.responseText);},
 	});
+
+	event.preventDefault();
 });
